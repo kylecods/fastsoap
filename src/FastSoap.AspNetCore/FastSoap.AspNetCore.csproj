@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IsAotCompatible>true</IsAotCompatible>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <EnableAotAnalyzer>true</EnableAotAnalyzer>
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
+    <RootNamespace>FastSoap.AspNetCore</RootNamespace>
+    <AssemblyName>FastSoap.AspNetCore</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FastSoap.Abstractions\FastSoap.Abstractions.csproj" />
+    <ProjectReference Include="..\FastSoap.Core\FastSoap.Core.csproj" />
+    <ProjectReference Include="..\FastSoap.Metadata\FastSoap.Metadata.csproj" />
+  </ItemGroup>
+
+</Project>

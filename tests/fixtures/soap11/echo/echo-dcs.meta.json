@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "CoreWCF.Http.Tests.SimpleTest.BasicHttpRequestReplyEchoString",
+  "expectedOutcome": "supported",
+  "fixtureId": "SOAP11-ECHO-DCS",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "1efaf76acd9b64a85f1206124a53fa39769ac32a8cc3e4f4f731767d489e5db3",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "d9a75d3d0cbd8ee745432026137132a181381d4c0a9aa96c89878a4c43fb27f6",
+  "responseStatusCode": 200,
+  "serializer": "DataContractSerializer",
+  "soapVersion": "Soap11"
+}

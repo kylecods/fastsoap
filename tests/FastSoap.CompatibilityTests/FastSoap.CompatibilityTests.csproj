@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>FastSoap.CompatibilityTests</RootNamespace>
+    <AssemblyName>FastSoap.CompatibilityTests</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="CloudNimble.Text.Xml.XmlSerializer.IsReflectionEnabledByDefault" Value="false" Trim="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\FastSoap.Abstractions\FastSoap.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\FastSoap.AspNetCore\FastSoap.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\src\FastSoap.Core\FastSoap.Core.csproj" />
+    <ProjectReference Include="..\..\src\FastSoap.Metadata\FastSoap.Metadata.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="System.ServiceModel.Http" />
+    <PackageReference Include="System.ServiceModel.Primitives" />
+    <PackageReference Include="XmlEssentials" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+
+</Project>

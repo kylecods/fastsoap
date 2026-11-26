@@ -1,0 +1,15 @@
+{
+  "coreWcfMapping": "CoreWCF.Primitives.Tests.MessageTests.InvalidCharToString",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject invalid XML 1.0 control character (0x0F) before service invocation (HTTP 400)",
+  "fixtureId": "NEG-03B",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "be95398466f711f59a0817da56d2da0540fde94b8454d85c8536dc2561cc7e3d",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "6c0244c0dd543d7e7f849cc71a71965ad77f3402245f4fdc56a14c34625400f9",
+  "responseStatusCode": 500,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

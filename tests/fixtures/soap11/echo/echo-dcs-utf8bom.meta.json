@@ -1,0 +1,15 @@
+{
+  "coreWcfMapping": "CoreWCF TextMessageEncoder UTF-8 BOM handling \u002B FastSoap Plan \u00A76.1 \u0026 ADR-001 \u00A73.3 BLOCKER-2",
+  "expectedOutcome": "supported",
+  "fastSoapNote": "Valid UTF-8 BOM prefix (EF BB BF) must succeed with HTTP 200",
+  "fixtureId": "SOAP11-ECHO-DCS-UTF8BOM",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "5ab985d24980482ab575290b2e89a335dc1c50722bcc1ae29070a4aae3127327",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "d9a75d3d0cbd8ee745432026137132a181381d4c0a9aa96c89878a4c43fb27f6",
+  "responseStatusCode": 200,
+  "serializer": "DataContractSerializer",
+  "soapVersion": "Soap11"
+}

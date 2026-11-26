@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "CoreWCF.Http.Tests.ServiceWithMessageBodyAndHeaderTest.BasicScenarioServiceMessageBody",
+  "expectedOutcome": "supported",
+  "fixtureId": "SOAP11-ECHO-HEADER",
+  "path": "/soap11/echo-headers.svc",
+  "requestSha256": "f6d5dde5b128de9c486b74ca8eaa4c9e7eb3bde3c4eee2dfdeb086d2092d69f4",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IServiceWithMessageBodyAndHeader/EchoWithMessageContract\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "a840e8ee016b2d32bdab0081f92a8513fb3342fa07cbf0e25b1770e0dd5c35e7",
+  "responseStatusCode": 200,
+  "serializer": "XmlSerializer",
+  "soapVersion": "Soap11"
+}

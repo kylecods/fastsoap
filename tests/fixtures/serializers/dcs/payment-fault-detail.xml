@@ -1,0 +1,1 @@
+<PaymentFaultDetail xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:payments"><ErrorCode>INVALID_AMOUNT</ErrorCode><Message>Transfer amount must be non-negative.</Message></PaymentFaultDetail>

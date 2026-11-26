@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+    <LangVersion>15</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>R0B.SoapCoreSpike</RootNamespace>
+    <AssemblyName>R0B-SoapCoreSpike</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SoapCore" Version="1.2.1.18" />
+    <PackageReference Include="XmlEssentials" Version="1.0.0" />
+  </ItemGroup>
+
+</Project>

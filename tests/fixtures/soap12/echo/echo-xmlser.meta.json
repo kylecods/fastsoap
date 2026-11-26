@@ -1,0 +1,13 @@
+{
+  "coreWcfMapping": "CoreWCF.Http.Tests.MessageVersionsTests \u002B ServiceWithCoreWCFXmlSerializerFormatTest",
+  "expectedOutcome": "supported",
+  "fixtureId": "SOAP12-ECHO-XMLSER",
+  "path": "/soap12/echo-xmlser.svc",
+  "requestSha256": "12ecc15b20dba4dbf79ad5f67d41a6c7c0cdd2c044b806f8257fbffc9b705eee",
+  "requestContentType": "application/soap\u002Bxml; charset=utf-8; action=\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseContentType": "application/soap\u002Bxml; charset=utf-8",
+  "responseSha256": "83ec822f55e58f309502aea1f74940c63415bf6937a0e6780038a518640a171f",
+  "responseStatusCode": 200,
+  "serializer": "XmlSerializer",
+  "soapVersion": "Soap12"
+}

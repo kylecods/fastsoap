@@ -1,0 +1,15 @@
+{
+  "coreWcfMapping": "CoreWCF MessageHeaders.UnderstoodHeaders / MustUnderstand processing \u002B FastSoap Plan \u00A76.3",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "SOAP 1.1 MustUnderstand fault (HTTP 500, faultcode s:MustUnderstand); zero service invocations",
+  "fixtureId": "NEG-06A",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "a7f0f01f88b7e397559886daef25d32df5167fae3dcd8ae86a9a0830dbb744ee",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "9e49662578d505e44787f16b132ad7ab9c45934555e52510b01fdfec6e304f5d",
+  "responseStatusCode": 500,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

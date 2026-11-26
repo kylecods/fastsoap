@@ -1,0 +1,13 @@
+{
+  "coreWcfMapping": "CoreWCF.Primitives.Tests.BasicFaultTest \u002B CoreWCF.Http.Tests.FaultContractTests",
+  "expectedOutcome": "supported",
+  "fixtureId": "SOAP12-TRANSFER-FAULT-TYPED",
+  "path": "/soap12/payment-dcs-urn.svc",
+  "requestSha256": "38d3a63a0fb11fb776200c1ba8fbb6a555bf09aa0e8ac4ce79c41163abd91ddf",
+  "requestContentType": "application/soap\u002Bxml; charset=utf-8; action=\u0022urn:payments/IPaymentService/Transfer\u0022",
+  "responseContentType": "application/soap\u002Bxml; charset=utf-8",
+  "responseSha256": "61c169224592dfd22bdd0a3f53c61dae50e8e5f638cb89f55e199db60d73027e",
+  "responseStatusCode": 500,
+  "serializer": "DataContractSerializer",
+  "soapVersion": "Soap12"
+}

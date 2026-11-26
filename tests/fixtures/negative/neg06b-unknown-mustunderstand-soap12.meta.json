@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "CoreWCF SOAP 1.2 MustUnderstand \u002B NotUnderstood header semantics \u002B FastSoap Plan \u00A76.3",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "SOAP 1.2 MustUnderstand fault with NotUnderstood header (faultcode s:MustUnderstand); zero service invocations",
+  "fixtureId": "NEG-06B",
+  "path": "/soap12/echo-dcs.svc",
+  "requestSha256": "9a828001ed50c741fb2b7ddea4d8e922a1ae223b054a0c83d52caf5b11aee54c",
+  "requestContentType": "application/soap\u002Bxml; charset=utf-8; action=\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseContentType": "application/soap\u002Bxml; charset=utf-8",
+  "responseSha256": "f7a8d073e8a8bf13c31cb2427949f02149ab52a9d47f984fd0a855f1c615085c",
+  "responseStatusCode": 500,
+  "serializer": "None",
+  "soapVersion": "Soap12"
+}

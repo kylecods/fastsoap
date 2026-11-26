@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "CoreWCF TextMessageEncoder (XML 1.0 only) \u002B FastSoap Plan \u00A76.2 \u0026 ADR-001 \u00A73.3 BLOCKER-2",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject XML 1.1 declaration (XML 1.0 only per FastSoap Plan \u00A76.2, HTTP 400); zero service invocations",
+  "fixtureId": "NEG-15",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "cf3c5b8fada9e34ab0c7e4dfb68162be3837088d80fa80074b137d0b67176d7d",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "responseStatusCode": 400,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

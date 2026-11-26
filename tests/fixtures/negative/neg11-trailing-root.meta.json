@@ -1,0 +1,15 @@
+{
+  "coreWcfMapping": "CoreWCF XmlReader trailing content rejection \u002B FastSoap Plan \u00A75.2 \u0026 \u00A76.2",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject trailing XML root content (HTTP 400); zero service invocations",
+  "fixtureId": "NEG-11",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "7337dda060170b24d0240442592691bac9625f79f5fad966783715f30dc8bc2c",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "ce0ca8e25f0e82a1ea8b1576ce75980bc6fd2f541064c352a013c66bc8c5c94e",
+  "responseStatusCode": 500,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

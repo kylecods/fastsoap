@@ -1,0 +1,15 @@
+{
+  "coreWcfMapping": "CoreWCF Envelope/Message reader validation \u002B FastSoap Plan \u00A76.2",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject Header after Body per SOAP 1.1 envelope grammar (HTTP 400 / Client fault)",
+  "fixtureId": "NEG-05",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "2351bf92929cd99b4f835d0d267fc1be8780da2d304238c4accdc60281301b16",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "7292a07555211bac3c435ea28ff15a1738ea4ffea2c58a3a009190f85f49246f",
+  "responseStatusCode": 500,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "CoreWCF Message.CreateMessage envelope check \u002B FastSoap Plan \u00A76.2",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject non-Envelope root element (HTTP 400 / Client fault)",
+  "fixtureId": "NEG-10",
+  "path": "/soap11/payment-dcs-urn.svc",
+  "requestSha256": "2eb252fad687ce2100c3452f1c5ecdffd4aebd8163dedbad4de169df0f61941b",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022urn:payments/IPaymentService/Transfer\u0022",
+  "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "responseStatusCode": 400,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

@@ -1,0 +1,15 @@
+{
+  "coreWcfMapping": "FastSoap Plan \u00A71.1 \u0026 \u00A76.2 \u002B ADR-001 \u00A73.2 #2 \u0026 \u00A73.3 BLOCKER-2",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject soap:encodingStyle attribute on Envelope (document/literal only per FastSoap Plan \u00A76.2 \u0026 ADR-001 \u00A73.2, HTTP 400)",
+  "fixtureId": "NEG-17A",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "c0e6d9f436110bf609cd30f3eec5ed822f7982ee1226182905c30e3608a65452",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "d9a75d3d0cbd8ee745432026137132a181381d4c0a9aa96c89878a4c43fb27f6",
+  "responseStatusCode": 200,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

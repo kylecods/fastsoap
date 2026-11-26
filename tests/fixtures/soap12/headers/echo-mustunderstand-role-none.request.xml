@@ -1,0 +1,1 @@
+<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope"><s:Header><x:NoneHeader xmlns:x="urn:other-node" s:role="http://www.w3.org/2003/05/soap-envelope/role/none" s:mustUnderstand="true">value</x:NoneHeader></s:Header><s:Body><EchoString xmlns="http://tempuri.org/"><echo>hello</echo></EchoString></s:Body></s:Envelope>

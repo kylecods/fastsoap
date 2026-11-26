@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "CoreWCF.Http.Tests.TaskCollectionsTests \u002B CoreWCF.DataContractSerialization.TestCorpus.SanityCollections",
+  "expectedOutcome": "supported",
+  "fixtureId": "SOAP11-BATCH-TRANSFER-DCS",
+  "path": "/soap11/payment-dcs-urn.svc",
+  "requestSha256": "465bdc159a70f36e74d2e970bb21a8d40dd894441d1a55534fe7291350ebf24b",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022urn:payments/IPaymentService/BatchTransfer\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "15fc12e56d8ec2442f44d40baebd98b66f6f6b2dab8e6b103da2b50705b2f242",
+  "responseStatusCode": 200,
+  "serializer": "DataContractSerializer",
+  "soapVersion": "Soap11"
+}

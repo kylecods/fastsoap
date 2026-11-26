@@ -1,0 +1,1 @@
+<TransferRequestDefaultDcs xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/FastSoap.R0G.Oracle.Contracts"><AccountNumber>123456</AccountNumber><Amount>100.50</Amount><Currency>USD</Currency><Note i:nil="true" /></TransferRequestDefaultDcs>

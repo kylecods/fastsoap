@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "CoreWCF TextMessageEncoder UTF-8 BOM validation \u002B FastSoap Plan \u00A76.1 \u0026 ADR-001 \u00A73.3 BLOCKER-2",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject truncated/invalid UTF-8 BOM prefix before service invocation (HTTP 400)",
+  "fixtureId": "NEG-16A",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "6c6fd549ca1a990fe4151bf3e13520aa215241532be3550bac8723e877e2d41f",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "responseStatusCode": 400,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

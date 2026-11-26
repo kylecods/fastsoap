@@ -1,0 +1,1 @@
+<TransferRequest xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:payments"><AccountNumber>123456</AccountNumber><Amount>25.00</Amount><Currency>EUR</Currency><Metadata i:nil="true" /><Note i:nil="true" /></TransferRequest>

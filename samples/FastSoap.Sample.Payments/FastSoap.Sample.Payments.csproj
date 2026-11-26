@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsAotCompatible>true</IsAotCompatible>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <EnableAotAnalyzer>true</EnableAotAnalyzer>
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
+    <RootNamespace>FastSoap.Sample.Payments</RootNamespace>
+    <AssemblyName>FastSoap.Sample.Payments</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="CloudNimble.Text.Xml.XmlSerializer.IsReflectionEnabledByDefault" Value="false" Trim="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\FastSoap.Abstractions\FastSoap.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\FastSoap.AspNetCore\FastSoap.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\src\FastSoap.Core\FastSoap.Core.csproj" />
+    <ProjectReference Include="..\..\src\FastSoap.Metadata\FastSoap.Metadata.csproj" />
+    <ProjectReference Include="..\..\src\FastSoap.Generators\FastSoap.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" GlobalPropertiesToRemove="PublishAot;RuntimeIdentifier;SelfContained;PublishTrimmed" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="XmlEssentials" />
+  </ItemGroup>
+
+</Project>

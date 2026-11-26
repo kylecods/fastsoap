@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "CoreWCF.Primitives.Tests.BasicFaultTest \u002B FastSoap Plan \u00A76.4",
+  "expectedOutcome": "supported",
+  "fixtureId": "SOAP11-TRANSFER-FAULT-RECEIVER",
+  "path": "/soap11/payment-dcs-urn.svc",
+  "requestSha256": "26ec231e2ab794b3c59dea8a55060386c17b1b3d55e6aedd95c1ec2a5e356047",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022urn:payments/IPaymentService/Transfer\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "9e49662578d505e44787f16b132ad7ab9c45934555e52510b01fdfec6e304f5d",
+  "responseStatusCode": 500,
+  "serializer": "DataContractSerializer",
+  "soapVersion": "Soap11"
+}

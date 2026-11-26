@@ -1,0 +1,1 @@
+<TransferRequest xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:payments"><AccountNumber>123456</AccountNumber><Amount>100.50</Amount><Currency>USD</Currency><Metadata><CorrelationId>CORR-2026-0001</CorrelationId><Reference>INV-42</Reference></Metadata><Note>Invoice settlement</Note></TransferRequest>

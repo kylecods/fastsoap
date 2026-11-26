@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "CoreWCF.Http.Tests.SimpleTest \u002B FastSoap Plan \u00A712.1 (nil vs omission)",
+  "expectedOutcome": "supported",
+  "fixtureId": "SOAP11-ECHO-DCS-NULL",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "f9498c91ffafad6814804f71e9434075701b0a28053b1473a0eb2f47f65e6dab",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "f634a4a2e2671272c26c0336d15327e7431ecb9bc9a0c9cbf0cad689f3ebc744",
+  "responseStatusCode": 200,
+  "serializer": "DataContractSerializer",
+  "soapVersion": "Soap11"
+}

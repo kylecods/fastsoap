@@ -1,0 +1,22 @@
+root = false
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = false
+
+[*.xml]
+indent_size = 2
+insert_final_newline = false
+
+[*.wsdl]
+indent_size = 2
+insert_final_newline = false
+
+[*.xsd]
+indent_size = 2
+insert_final_newline = false
+
+[*.json]
+indent_size = 2
+insert_final_newline = true

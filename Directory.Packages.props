@@ -1,0 +1,30 @@
+<Project>
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Runtime XML backend (ADR-011) -->
+    <PackageVersion Include="XmlEssentials" Version="1.0.0" />
+
+    <!-- Roslyn source generator & analyzer host compatibility (netstandard2.0) -->
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
+
+    <!-- Testing (xunit.v3 + VSTest integration) -->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.12.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
+    <PackageVersion Include="xunit.v3" Version="3.2.2" />
+
+    <!-- Oracle & JIT baselines ONLY (never referenced by FastSoap runtime packages) -->
+    <PackageVersion Include="CoreWCF.Http" Version="1.9.2" />
+    <PackageVersion Include="CoreWCF.Primitives" Version="1.9.2" />
+    <PackageVersion Include="SoapCore" Version="1.2.1.18" />
+    <PackageVersion Include="System.ServiceModel.Http" Version="10.0.652802" />
+    <PackageVersion Include="System.ServiceModel.Primitives" Version="10.0.652802" />
+
+    <!-- Benchmarks ONLY -->
+    <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
+  </ItemGroup>
+
+</Project>

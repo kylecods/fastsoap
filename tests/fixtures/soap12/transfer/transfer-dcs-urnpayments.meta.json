@@ -1,0 +1,13 @@
+{
+  "coreWcfMapping": "CoreWCF.Http.Tests.MessageVersionsTests (Soap12) \u002B FastSoap Plan \u00A73.2 \u0026 \u00A76.1",
+  "expectedOutcome": "supported",
+  "fixtureId": "SOAP12-TRANSFER-DCS-URN",
+  "path": "/soap12/payment-dcs-urn.svc",
+  "requestSha256": "68017711654af8158460436e94f5baf8fa9468a07186712da219d8b37d294faf",
+  "requestContentType": "application/soap\u002Bxml; charset=utf-8; action=\u0022urn:payments/IPaymentService/Transfer\u0022",
+  "responseContentType": "application/soap\u002Bxml; charset=utf-8",
+  "responseSha256": "ce3b7f9dfe8782357370c27691202869c2940d71cf17434d05be34b85e6927fd",
+  "responseStatusCode": 200,
+  "serializer": "DataContractSerializer",
+  "soapVersion": "Soap12"
+}

@@ -1,0 +1,15 @@
+{
+  "coreWcfMapping": "FastSoap Plan \u00A76.3 \u0026 \u00A78 (MaxHeaderCount=32) \u002B ADR-001 \u00A73.2 #2 \u0026 \u00A73.3 BLOCKER-2",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject SOAP Envelope exceeding MaxHeaderCount (32) before service invocation (HTTP 400)",
+  "fixtureId": "NEG-18C",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "43f22c32eacdd45deef57cce7e9bcefe568ec024973a11188ce0446ac990a837",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "d9a75d3d0cbd8ee745432026137132a181381d4c0a9aa96c89878a4c43fb27f6",
+  "responseStatusCode": 200,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

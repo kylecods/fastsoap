@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "CoreWCF TextMessageEncoder UTF-8 encoding enforcement \u002B FastSoap Plan \u00A76.1",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject non-UTF-8 charset / declaration mismatch (HTTP 415 UnsupportedMediaType)",
+  "fixtureId": "NEG-09",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "4e62ae4c726e313c06f397c10251c674b825cb7e12cd210cf1c4d83140351ce8",
+  "requestContentType": "text/xml; charset=utf-16",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "responseStatusCode": 400,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

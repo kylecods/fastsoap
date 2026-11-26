@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "CoreWCF TextMessageEncoder BOM/charset validation \u002B FastSoap Plan \u00A76.1 \u0026 ADR-001 \u00A73.3 BLOCKER-2",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject non-UTF-8 BOM (UTF-16 LE 0xFF 0xFE) with text/xml; charset=utf-8 (HTTP 400 / 415); zero service invocations",
+  "fixtureId": "NEG-16B",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "efb314ffbc260467e7feac1894fd43a6190a38d8a6e063f7b80ff9ffdbb63a3c",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "responseStatusCode": 400,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

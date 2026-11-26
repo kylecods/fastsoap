@@ -1,0 +1,15 @@
+{
+  "coreWcfMapping": "SOAP 1.1 \u00A73 / SOAP 1.2 Part 1 \u00A75 \u002B ADR-001 \u00A73.2 #1(h) \u0026 \u00A73.3 BLOCKER-2",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject processing instruction inside deserialized body element (HTTP 400 / Client fault); zero service invocations",
+  "fixtureId": "NEG-14B",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "71ebb2f8a10ef0e18399d774fa59ae6b7d1a9c37c45c4a66d1bebf9c87f02dcb",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "6caa381ae849bfbaaa6fdc7641a9696b4390fdbcd18f317e8da86c1186250d61",
+  "responseStatusCode": 500,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

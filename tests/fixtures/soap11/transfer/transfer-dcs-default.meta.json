@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "CoreWCF.Http.Tests.ComplexSerializationTests.DataContractNameSpaceComplexSerialization",
+  "expectedOutcome": "pending",
+  "fixtureId": "SOAP11-TRANSFER-DCS-DEFAULT",
+  "path": "/soap11/payment-dcs-default.svc",
+  "requestSha256": "235c76a4a5e3f0294e13ff41280a32123c52065ebea0f187476c18fc2150e212",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022urn:payments/IPaymentService/Transfer\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "ec83ec71d570604397885f8a206183a8212d9c09db17e2b3c6d2f59fccabc8e8",
+  "responseStatusCode": 200,
+  "serializer": "DataContractSerializer",
+  "soapVersion": "Soap11"
+}

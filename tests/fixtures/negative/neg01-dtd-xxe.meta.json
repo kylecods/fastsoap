@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "CoreWCF TextMessageEncoder / XmlDictionaryReaderQuotas (DtdProcessing.Prohibit) \u002B FastSoap Plan \u00A711",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject before service invocation (DTD prohibited, HTTP 400 / Sender fault)",
+  "fixtureId": "NEG-01",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "ea15a670f51c0b2e48d6000b6ce953e71395e580c098637fbe313f733f040db0",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "responseStatusCode": 400,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

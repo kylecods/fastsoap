@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/FastSoap.Abstractions/FastSoap.Abstractions.csproj" />
+    <Project Path="src/FastSoap.AspNetCore/FastSoap.AspNetCore.csproj" />
+    <Project Path="src/FastSoap.Core/FastSoap.Core.csproj" />
+    <Project Path="src/FastSoap.Generators/FastSoap.Generators.csproj" />
+    <Project Path="src/FastSoap.Metadata/FastSoap.Metadata.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/FastSoap.Sample.NativeAot/FastSoap.Sample.NativeAot.csproj" />
+    <Project Path="samples/FastSoap.Sample.Payments/FastSoap.Sample.Payments.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/FastSoap.CompatibilityTests/FastSoap.CompatibilityTests.csproj" />
+    <Project Path="tests/FastSoap.GeneratorTests/FastSoap.GeneratorTests.csproj" />
+    <Project Path="tests/FastSoap.IntegrationTests/FastSoap.IntegrationTests.csproj" />
+    <Project Path="tests/FastSoap.MetadataTests/FastSoap.MetadataTests.csproj" />
+    <Project Path="tests/FastSoap.ProtocolTests/FastSoap.ProtocolTests.csproj" />
+    <Project Path="tests/FastSoap.SerializationTests/FastSoap.SerializationTests.csproj" />
+    <Project Path="tests/FastSoap.UnitTests/FastSoap.UnitTests.csproj" />
+  </Folder>
+</Solution>

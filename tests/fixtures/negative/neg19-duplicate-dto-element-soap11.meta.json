@@ -1,0 +1,15 @@
+{
+  "coreWcfMapping": "FastSoap Plan \u00A77.2 \u0026 \u00A711 (duplicate fields) \u002B ADR-001 \u00A73.2 #1 \u0026 \u00A73.3 BLOCKER-2",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject duplicate XML element in DTO payload (AllowDuplicateProperties=false per FastSoap Plan \u00A77.2 \u0026 ADR-001 \u00A73.2, HTTP 400)",
+  "fixtureId": "NEG-19",
+  "path": "/soap11/payment-xmlser.svc",
+  "requestSha256": "acc4626ef31475dd1d8870dc2ab2485e0c9c9ebdebcb4dcfa4db62ac82274f9c",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022urn:payments/IPaymentService/Transfer\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "48206cf032443c728b23ddb9211d51af475a6207e8b7151d9b92f59f11d7915c",
+  "responseStatusCode": 200,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

@@ -1,0 +1,13 @@
+{
+  "coreWcfMapping": "CoreWCF.Http.Tests.MessageVersionsTests (Soap12) \u002B ServiceWithCoreWCFXmlSerializerFormatTest",
+  "expectedOutcome": "supported",
+  "fixtureId": "SOAP12-TRANSFER-XMLSER",
+  "path": "/soap12/payment-xmlser.svc",
+  "requestSha256": "df020a60bd3803abf8fe9ba958d225218fa2e272d6af4e8dfa02ff14ffc62b1d",
+  "requestContentType": "application/soap\u002Bxml; charset=utf-8; action=\u0022urn:payments/IPaymentService/Transfer\u0022",
+  "responseContentType": "application/soap\u002Bxml; charset=utf-8",
+  "responseSha256": "76d0a8fc30c528f79e171a11c2d5e9db47eac470a1a28d57195c6e7daee6991c",
+  "responseStatusCode": 200,
+  "serializer": "XmlSerializer",
+  "soapVersion": "Soap12"
+}

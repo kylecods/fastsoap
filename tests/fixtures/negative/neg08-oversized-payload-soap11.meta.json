@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "CoreWCF.Http.Tests.RequestDelegateHandlerMaxBodySizeTests \u0026 LargeRequestTests (65536 default quota)",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject payload exceeding MaxRequestBytes (HTTP 413 PayloadTooLarge per FastSoap Plan \u00A76.4)",
+  "fixtureId": "NEG-08",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "0133a57a9b9323287bab9db3462a614a6057b0c2a514413ec9dac92915e3e36a",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "responseStatusCode": 413,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

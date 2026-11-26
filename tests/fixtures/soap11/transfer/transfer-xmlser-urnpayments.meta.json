@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "CoreWCF.Http.Tests.ServiceWithCoreWCFXmlSerializerFormatTest \u002B FastSoap Plan \u00A73.2",
+  "expectedOutcome": "supported",
+  "fixtureId": "SOAP11-TRANSFER-XMLSER",
+  "path": "/soap11/payment-xmlser.svc",
+  "requestSha256": "05826f71c5ac9567d02c7c060570919bee518c61cd4ed638547234ad033a6d0f",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022urn:payments/IPaymentService/Transfer\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "48206cf032443c728b23ddb9211d51af475a6207e8b7151d9b92f59f11d7915c",
+  "responseStatusCode": 200,
+  "serializer": "XmlSerializer",
+  "soapVersion": "Soap11"
+}

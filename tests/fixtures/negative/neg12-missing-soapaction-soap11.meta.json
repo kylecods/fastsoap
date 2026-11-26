@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "CoreWCF BasicHttpBinding missing SOAPAction handling \u002B FastSoap Plan \u00A76.1",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject missing SOAPAction in strict SOAP 1.1 mode (HTTP 400 / Client fault)",
+  "fixtureId": "NEG-12",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "1efaf76acd9b64a85f1206124a53fa39769ac32a8cc3e4f4f731767d489e5db3",
+  "requestContentType": "text/xml; charset=utf-8",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "4eed183212160f74eabddf06d3d89c14611eee86f7dae928b66421b372fb4200",
+  "responseStatusCode": 500,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

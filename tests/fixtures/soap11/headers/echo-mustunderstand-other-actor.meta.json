@@ -1,0 +1,15 @@
+{
+  "coreWcfMapping": "SOAP 1.1 \u00A74.2.2/\u00A74.2.3 non-matching actor with mustUnderstand=\u00271\u0027 \u002B FastSoap Plan \u00A76.3 \u0026 ADR-001 \u00A73.3 BLOCKER-2",
+  "expectedOutcome": "supported",
+  "fastSoapNote": "SOAP 1.1 mustUnderstand=\u00271\u0027 targeted at a non-matching actor must NOT fault at ultimate receiver (FastSoap expected HTTP 200 EchoStringResponse; CoreWCF 1.9.2 default ValidateMustUnderstand=true returns HTTP 500)",
+  "fixtureId": "SOAP11-HEADER-MUSTUNDERSTAND-OTHER-ACTOR",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "0746e648c7c881733a79cd937e50697e5e56114797c06abe86fc1b81562e69ac",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "9e49662578d505e44787f16b132ad7ab9c45934555e52510b01fdfec6e304f5d",
+  "responseStatusCode": 500,
+  "serializer": "DataContractSerializer",
+  "soapVersion": "Soap11"
+}

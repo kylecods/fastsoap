@@ -1,0 +1,1 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body><EchoStringResponse xmlns="http://tempuri.org/"><EchoStringResult>hello</EchoStringResult></EchoStringResponse></s:Body></s:Envelope>

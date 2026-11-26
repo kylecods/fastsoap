@@ -1,0 +1,15 @@
+{
+  "coreWcfMapping": "CoreWCF TextMessageEncoder UTF-8 decoding \u002B FastSoap Plan \u00A76.1 \u0026 \u00A711",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject invalid UTF-8 byte sequences before service invocation (HTTP 400)",
+  "fixtureId": "NEG-03A",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "80d13593172064829252023ec5099a5e6b7bf6e09941294d91af6c5b1fa7ab9b",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "4a98c1bb1afc03a0a21ad158f48d78c6626841a26110e6dbfd440861353b15de",
+  "responseStatusCode": 500,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

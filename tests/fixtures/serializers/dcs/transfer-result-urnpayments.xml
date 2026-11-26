@@ -1,0 +1,1 @@
+<TransferResult xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:payments"><TransactionId>TX-001</TransactionId><Successful>true</Successful><ProcessedAtUtc>2026-11-26T12:00:00Z</ProcessedAtUtc><Status>Completed</Status></TransferResult>

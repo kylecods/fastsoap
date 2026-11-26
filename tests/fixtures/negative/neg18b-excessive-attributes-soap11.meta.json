@@ -1,0 +1,15 @@
+{
+  "coreWcfMapping": "FastSoap Plan \u00A78 \u0026 ADR-001 \u00A73.2 #1 (MaxAttributeCount=64) \u0026 \u00A73.3 BLOCKER-2",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject element exceeding MaxAttributesPerElement (64) before service invocation (HTTP 400)",
+  "fixtureId": "NEG-18B",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "a270b62358313d9e99e4d30cca31856f41fbe790606b99ca0a5735cbdb855054",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "d9a75d3d0cbd8ee745432026137132a181381d4c0a9aa96c89878a4c43fb27f6",
+  "responseStatusCode": 200,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "SOAP 1.2 Part 1 \u00A72.2/\u00A72.4 role/none with mustUnderstand=\u0027true\u0027 \u002B FastSoap Plan \u00A76.3 \u0026 ADR-001 \u00A73.3 BLOCKER-2",
+  "expectedOutcome": "supported",
+  "fastSoapNote": "SOAP 1.2 mustUnderstand=\u0027true\u0027 targeted at role/none must NOT fault (FastSoap expected HTTP 200 EchoStringResponse; CoreWCF 1.9.2 default ValidateMustUnderstand=true returns HTTP 500)",
+  "fixtureId": "SOAP12-HEADER-MUSTUNDERSTAND-ROLE-NONE",
+  "path": "/soap12/echo-dcs.svc",
+  "requestSha256": "80669a419b2020ab45c6a77e7b3080f4eb4ff90d16af53c203c7fe63415d14cb",
+  "requestContentType": "application/soap\u002Bxml; charset=utf-8; action=\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseContentType": "application/soap\u002Bxml; charset=utf-8",
+  "responseSha256": "f7a8d073e8a8bf13c31cb2427949f02149ab52a9d47f984fd0a855f1c615085c",
+  "responseStatusCode": 500,
+  "serializer": "DataContractSerializer",
+  "soapVersion": "Soap12"
+}

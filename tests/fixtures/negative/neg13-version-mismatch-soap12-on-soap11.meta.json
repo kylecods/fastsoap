@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "CoreWCF.Http.Tests.MessageVersionsTests \u002B FastSoap Plan \u00A76.1 \u0026 \u00A76.4",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "SOAP VersionMismatch fault (HTTP 500, faultcode s:VersionMismatch); zero service invocations",
+  "fixtureId": "NEG-13",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "5b2a111b9d9f5740823652ae9df16373023a1acc5677e6ccde6df0c3c79efa0f",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "responseStatusCode": 400,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

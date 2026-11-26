@@ -1,0 +1,15 @@
+{
+  "coreWcfMapping": "CoreWCF XmlDictionaryReaderQuotas.MaxDepth \u002B FastSoap Plan \u00A78 \u0026 ADR-001 \u00A73.3 BLOCKER-2",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject XML nesting exceeding MaxXmlDepth (64) before service invocation (HTTP 400)",
+  "fixtureId": "NEG-18A",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "22bccb8e59e4e409f6611e894eb8a71084613305d362ca81cfd19b7b0b688251",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "b83fd5c549b861c6a45d1e51f2165d4f33bceadcc5e8297d675be134b7f270fb",
+  "responseStatusCode": 500,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

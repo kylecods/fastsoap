@@ -1,0 +1,15 @@
+{
+  "coreWcfMapping": "CoreWCF.Http.Tests.OpActionReplyActionBehaviorTests \u002B FastSoap Plan \u00A74 \u0026 \u00A76.1",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject action/body QName mismatch with SOAP fault; zero service invocations",
+  "fixtureId": "NEG-07",
+  "path": "/soap11/payment-dcs-urn.svc",
+  "requestSha256": "3f69eaf83013e43ebb3a59c6b3769b4aad7133d2239df64ff05168dcf37ce114",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022urn:payments/IPaymentService/Transfer\u0022",
+  "responseContentType": "text/xml; charset=utf-8",
+  "responseSha256": "9e49662578d505e44787f16b132ad7ab9c45934555e52510b01fdfec6e304f5d",
+  "responseStatusCode": 500,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

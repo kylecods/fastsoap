@@ -1,0 +1,1 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body><Transfer xmlns="urn:payments"><request><AccountNumber>123456</AccountNumber><AccountNumber>999999</AccountNumber><Amount>100.50</Amount><Currency>USD</Currency></request></Transfer></s:Body></s:Envelope>

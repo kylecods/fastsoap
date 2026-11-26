@@ -1,0 +1,1048 @@
+{
+  "entries": [
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF.Http.Tests.SimpleTest.BasicHttpRequestReplyEchoString",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP11-ECHO-DCS",
+      "files": [
+        "soap11/echo/echo-dcs.request.xml",
+        "soap11/echo/echo-dcs.response.xml",
+        "soap11/echo/echo-dcs.meta.json"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "soap11/echo/echo-dcs.request.xml": "1efaf76acd9b64a85f1206124a53fa39769ac32a8cc3e4f4f731767d489e5db3",
+        "soap11/echo/echo-dcs.response.xml": "d9a75d3d0cbd8ee745432026137132a181381d4c0a9aa96c89878a4c43fb27f6"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF.Http.Tests.SimpleTest \u002B FastSoap Plan \u00A712.1 (non-ASCII UTF-8)",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP11-ECHO-DCS-NONASCII",
+      "files": [
+        "soap11/echo/echo-dcs-nonascii.request.xml",
+        "soap11/echo/echo-dcs-nonascii.response.xml",
+        "soap11/echo/echo-dcs-nonascii.meta.json"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "soap11/echo/echo-dcs-nonascii.request.xml": "a4e471431b75a81dfaeb743c0adb1004095191d4e2eb3e4192c45aa874ec424f",
+        "soap11/echo/echo-dcs-nonascii.response.xml": "5c258730cae4dc32cccf311400acff4f48c19b24267f478a190e4594dc0f7649"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF.Http.Tests.SimpleTest \u002B FastSoap Plan \u00A712.1 (nil vs omission)",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP11-ECHO-DCS-NULL",
+      "files": [
+        "soap11/echo/echo-dcs-null.request.xml",
+        "soap11/echo/echo-dcs-null.response.xml",
+        "soap11/echo/echo-dcs-null.meta.json"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "soap11/echo/echo-dcs-null.request.xml": "f9498c91ffafad6814804f71e9434075701b0a28053b1473a0eb2f47f65e6dab",
+        "soap11/echo/echo-dcs-null.response.xml": "f634a4a2e2671272c26c0336d15327e7431ecb9bc9a0c9cbf0cad689f3ebc744"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF.Http.Tests.ServiceWithCoreWCFXmlSerializerFormatTest",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP11-ECHO-XMLSER",
+      "files": [
+        "soap11/echo/echo-xmlser.request.xml",
+        "soap11/echo/echo-xmlser.response.xml",
+        "soap11/echo/echo-xmlser.meta.json"
+      ],
+      "serializer": "XmlSerializer",
+      "sha256ByFile": {
+        "soap11/echo/echo-xmlser.request.xml": "109f362f364ae6ba64444a6c76e028757537a401930a5575561d486291ca1ca5",
+        "soap11/echo/echo-xmlser.response.xml": "83fe9d71c0c73bf0625c350e4e664414262da17595177b968dc2fa0da0f7a002"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF.Http.Tests.ServiceWithMessageBodyAndHeaderTest.BasicScenarioServiceMessageBody",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP11-ECHO-HEADER",
+      "files": [
+        "soap11/headers/echo-header-optional.request.xml",
+        "soap11/headers/echo-header-optional.response.xml",
+        "soap11/headers/echo-header-optional.meta.json"
+      ],
+      "serializer": "XmlSerializer",
+      "sha256ByFile": {
+        "soap11/headers/echo-header-optional.request.xml": "f6d5dde5b128de9c486b74ca8eaa4c9e7eb3bde3c4eee2dfdeb086d2092d69f4",
+        "soap11/headers/echo-header-optional.response.xml": "a840e8ee016b2d32bdab0081f92a8513fb3342fa07cbf0e25b1770e0dd5c35e7"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF.Http.Tests.ComplexSerializationTests.DataContractNameSpaceComplexSerialization",
+      "expectedOutcome": "pending",
+      "fixtureId": "SOAP11-TRANSFER-DCS-DEFAULT",
+      "files": [
+        "soap11/transfer/transfer-dcs-default.request.xml",
+        "soap11/transfer/transfer-dcs-default.response.xml",
+        "soap11/transfer/transfer-dcs-default.meta.json"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "soap11/transfer/transfer-dcs-default.request.xml": "235c76a4a5e3f0294e13ff41280a32123c52065ebea0f187476c18fc2150e212",
+        "soap11/transfer/transfer-dcs-default.response.xml": "ec83ec71d570604397885f8a206183a8212d9c09db17e2b3c6d2f59fccabc8e8"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF.Http.Tests.ServiceContractNameSpaceTests \u002B FastSoap Plan \u00A73.1/\u00A73.2",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP11-TRANSFER-DCS-URN",
+      "files": [
+        "soap11/transfer/transfer-dcs-urnpayments.request.xml",
+        "soap11/transfer/transfer-dcs-urnpayments.response.xml",
+        "soap11/transfer/transfer-dcs-urnpayments.meta.json"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "soap11/transfer/transfer-dcs-urnpayments.request.xml": "ec35d2e72bf89f7f06c4fd9b2e08349b3c9c32fe14f877665198602d8b1404c7",
+        "soap11/transfer/transfer-dcs-urnpayments.response.xml": "159787a9a964ca881f92ed4cc9310ca44670ff54b4958717622ccaf1358fd08d"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF.DataContractSerialization.TestCorpus.SanityNullable \u002B FastSoap Plan \u00A712.1",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP11-TRANSFER-DCS-NIL",
+      "files": [
+        "soap11/transfer/transfer-dcs-urnpayments-nil.request.xml",
+        "soap11/transfer/transfer-dcs-urnpayments-nil.response.xml",
+        "soap11/transfer/transfer-dcs-urnpayments-nil.meta.json"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "soap11/transfer/transfer-dcs-urnpayments-nil.request.xml": "a44c11fa5c7ee53a22b937f3ddf5723d0cf3a9b84c19b7b36390ba5b90a86fc5",
+        "soap11/transfer/transfer-dcs-urnpayments-nil.response.xml": "159787a9a964ca881f92ed4cc9310ca44670ff54b4958717622ccaf1358fd08d"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF.Http.Tests.ServiceWithCoreWCFXmlSerializerFormatTest \u002B FastSoap Plan \u00A73.2",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP11-TRANSFER-XMLSER",
+      "files": [
+        "soap11/transfer/transfer-xmlser-urnpayments.request.xml",
+        "soap11/transfer/transfer-xmlser-urnpayments.response.xml",
+        "soap11/transfer/transfer-xmlser-urnpayments.meta.json"
+      ],
+      "serializer": "XmlSerializer",
+      "sha256ByFile": {
+        "soap11/transfer/transfer-xmlser-urnpayments.request.xml": "05826f71c5ac9567d02c7c060570919bee518c61cd4ed638547234ad033a6d0f",
+        "soap11/transfer/transfer-xmlser-urnpayments.response.xml": "48206cf032443c728b23ddb9211d51af475a6207e8b7151d9b92f59f11d7915c"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF.Http.Tests.TaskCollectionsTests \u002B CoreWCF.DataContractSerialization.TestCorpus.SanityCollections",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP11-BATCH-TRANSFER-DCS",
+      "files": [
+        "soap11/collections/batch-transfer-dcs.request.xml",
+        "soap11/collections/batch-transfer-dcs.response.xml",
+        "soap11/collections/batch-transfer-dcs.meta.json"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "soap11/collections/batch-transfer-dcs.request.xml": "465bdc159a70f36e74d2e970bb21a8d40dd894441d1a55534fe7291350ebf24b",
+        "soap11/collections/batch-transfer-dcs.response.xml": "15fc12e56d8ec2442f44d40baebd98b66f6f6b2dab8e6b103da2b50705b2f242"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF.Http.Tests.FaultContractTests.DatacontractFaults",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP11-TRANSFER-FAULT-TYPED",
+      "files": [
+        "soap11/faults/transfer-typed-fault.request.xml",
+        "soap11/faults/transfer-typed-fault.response.xml",
+        "soap11/faults/transfer-typed-fault.meta.json"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "soap11/faults/transfer-typed-fault.request.xml": "2a1efc320d426ec6493c1b5d7e448400277b2a9be656415213dacba8d4bea4f2",
+        "soap11/faults/transfer-typed-fault.response.xml": "3baa552435b0c8c72b05679a241f6e0999684c4927c7ffe7b4cac1c49bf3d139"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF.Primitives.Tests.BasicFaultTest \u002B FastSoap Plan \u00A76.4",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP11-TRANSFER-FAULT-RECEIVER",
+      "files": [
+        "soap11/faults/transfer-receiver-fault.request.xml",
+        "soap11/faults/transfer-receiver-fault.response.xml",
+        "soap11/faults/transfer-receiver-fault.meta.json"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "soap11/faults/transfer-receiver-fault.request.xml": "26ec231e2ab794b3c59dea8a55060386c17b1b3d55e6aedd95c1ec2a5e356047",
+        "soap11/faults/transfer-receiver-fault.response.xml": "9e49662578d505e44787f16b132ad7ab9c45934555e52510b01fdfec6e304f5d"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF.Http.Tests.MessageVersionsTests.EchoStringTest (MessageVersion.Soap12)",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP12-ECHO-DCS",
+      "files": [
+        "soap12/echo/echo-dcs.request.xml",
+        "soap12/echo/echo-dcs.response.xml",
+        "soap12/echo/echo-dcs.meta.json"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "soap12/echo/echo-dcs.request.xml": "5b2a111b9d9f5740823652ae9df16373023a1acc5677e6ccde6df0c3c79efa0f",
+        "soap12/echo/echo-dcs.response.xml": "81599cae8aede5196729edecf827ccbcd85a3dbb5630cb03b69e653b1af6ea6a"
+      },
+      "wireProfile": "Soap12"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF.Http.Tests.MessageVersionsTests \u002B ServiceWithCoreWCFXmlSerializerFormatTest",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP12-ECHO-XMLSER",
+      "files": [
+        "soap12/echo/echo-xmlser.request.xml",
+        "soap12/echo/echo-xmlser.response.xml",
+        "soap12/echo/echo-xmlser.meta.json"
+      ],
+      "serializer": "XmlSerializer",
+      "sha256ByFile": {
+        "soap12/echo/echo-xmlser.request.xml": "12ecc15b20dba4dbf79ad5f67d41a6c7c0cdd2c044b806f8257fbffc9b705eee",
+        "soap12/echo/echo-xmlser.response.xml": "83ec822f55e58f309502aea1f74940c63415bf6937a0e6780038a518640a171f"
+      },
+      "wireProfile": "Soap12"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF.Http.Tests.MessageVersionsTests (Soap12) \u002B FastSoap Plan \u00A73.2 \u0026 \u00A76.1",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP12-TRANSFER-DCS-URN",
+      "files": [
+        "soap12/transfer/transfer-dcs-urnpayments.request.xml",
+        "soap12/transfer/transfer-dcs-urnpayments.response.xml",
+        "soap12/transfer/transfer-dcs-urnpayments.meta.json"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "soap12/transfer/transfer-dcs-urnpayments.request.xml": "68017711654af8158460436e94f5baf8fa9468a07186712da219d8b37d294faf",
+        "soap12/transfer/transfer-dcs-urnpayments.response.xml": "ce3b7f9dfe8782357370c27691202869c2940d71cf17434d05be34b85e6927fd"
+      },
+      "wireProfile": "Soap12"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF.Http.Tests.MessageVersionsTests (Soap12) \u002B ServiceWithCoreWCFXmlSerializerFormatTest",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP12-TRANSFER-XMLSER",
+      "files": [
+        "soap12/transfer/transfer-xmlser-urnpayments.request.xml",
+        "soap12/transfer/transfer-xmlser-urnpayments.response.xml",
+        "soap12/transfer/transfer-xmlser-urnpayments.meta.json"
+      ],
+      "serializer": "XmlSerializer",
+      "sha256ByFile": {
+        "soap12/transfer/transfer-xmlser-urnpayments.request.xml": "df020a60bd3803abf8fe9ba958d225218fa2e272d6af4e8dfa02ff14ffc62b1d",
+        "soap12/transfer/transfer-xmlser-urnpayments.response.xml": "76d0a8fc30c528f79e171a11c2d5e9db47eac470a1a28d57195c6e7daee6991c"
+      },
+      "wireProfile": "Soap12"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF.Primitives.Tests.BasicFaultTest \u002B CoreWCF.Http.Tests.FaultContractTests",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP12-TRANSFER-FAULT-TYPED",
+      "files": [
+        "soap12/faults/transfer-typed-fault.request.xml",
+        "soap12/faults/transfer-typed-fault.response.xml",
+        "soap12/faults/transfer-typed-fault.meta.json"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "soap12/faults/transfer-typed-fault.request.xml": "38d3a63a0fb11fb776200c1ba8fbb6a555bf09aa0e8ac4ce79c41163abd91ddf",
+        "soap12/faults/transfer-typed-fault.response.xml": "61c169224592dfd22bdd0a3f53c61dae50e8e5f638cb89f55e199db60d73027e"
+      },
+      "wireProfile": "Soap12"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "CoreWCF TextMessageEncoder UTF-8 BOM handling \u002B FastSoap Plan \u00A76.1 \u0026 ADR-001 \u00A73.3 BLOCKER-2",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP11-ECHO-DCS-UTF8BOM",
+      "files": [
+        "soap11/echo/echo-dcs-utf8bom.request.xml",
+        "soap11/echo/echo-dcs-utf8bom.response.xml",
+        "soap11/echo/echo-dcs-utf8bom.meta.json"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "soap11/echo/echo-dcs-utf8bom.request.xml": "5ab985d24980482ab575290b2e89a335dc1c50722bcc1ae29070a4aae3127327",
+        "soap11/echo/echo-dcs-utf8bom.response.xml": "d9a75d3d0cbd8ee745432026137132a181381d4c0a9aa96c89878a4c43fb27f6"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "SOAP 1.1 \u00A74.2.2/\u00A74.2.3 non-matching actor with mustUnderstand=\u00271\u0027 \u002B FastSoap Plan \u00A76.3 \u0026 ADR-001 \u00A73.3 BLOCKER-2",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP11-HEADER-MUSTUNDERSTAND-OTHER-ACTOR",
+      "files": [
+        "soap11/headers/echo-mustunderstand-other-actor.request.xml",
+        "soap11/headers/echo-mustunderstand-other-actor.corewcf-response.bin",
+        "soap11/headers/echo-mustunderstand-other-actor.meta.json"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "soap11/headers/echo-mustunderstand-other-actor.request.xml": "0746e648c7c881733a79cd937e50697e5e56114797c06abe86fc1b81562e69ac",
+        "soap11/headers/echo-mustunderstand-other-actor.corewcf-response.bin": "9e49662578d505e44787f16b132ad7ab9c45934555e52510b01fdfec6e304f5d"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "positive",
+      "coreWcfMapping": "SOAP 1.2 Part 1 \u00A72.2/\u00A72.4 role/none with mustUnderstand=\u0027true\u0027 \u002B FastSoap Plan \u00A76.3 \u0026 ADR-001 \u00A73.3 BLOCKER-2",
+      "expectedOutcome": "supported",
+      "fixtureId": "SOAP12-HEADER-MUSTUNDERSTAND-ROLE-NONE",
+      "files": [
+        "soap12/headers/echo-mustunderstand-role-none.request.xml",
+        "soap12/headers/echo-mustunderstand-role-none.corewcf-response.bin",
+        "soap12/headers/echo-mustunderstand-role-none.meta.json"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "soap12/headers/echo-mustunderstand-role-none.request.xml": "80669a419b2020ab45c6a77e7b3080f4eb4ff90d16af53c203c7fe63415d14cb",
+        "soap12/headers/echo-mustunderstand-role-none.corewcf-response.bin": "f7a8d073e8a8bf13c31cb2427949f02149ab52a9d47f984fd0a855f1c615085c"
+      },
+      "wireProfile": "Soap12"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF TextMessageEncoder / XmlDictionaryReaderQuotas (DtdProcessing.Prohibit) \u002B FastSoap Plan \u00A711",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-01",
+      "files": [
+        "negative/neg01-dtd-xxe.request.xml",
+        "negative/neg01-dtd-xxe.corewcf-response.bin",
+        "negative/neg01-dtd-xxe.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg01-dtd-xxe.request.xml": "ea15a670f51c0b2e48d6000b6ce953e71395e580c098637fbe313f733f040db0",
+        "negative/neg01-dtd-xxe.corewcf-response.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF TextMessageEncoder / XmlDictionaryReaderQuotas (DtdProcessing.Prohibit) \u002B FastSoap Plan \u00A711",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-02",
+      "files": [
+        "negative/neg02-dtd-entity-expansion.request.xml",
+        "negative/neg02-dtd-entity-expansion.corewcf-response.bin",
+        "negative/neg02-dtd-entity-expansion.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg02-dtd-entity-expansion.request.xml": "68190c4219df96aa94988c1228a90d72cb5af9c7cd29500c252d49de4e8b599c",
+        "negative/neg02-dtd-entity-expansion.corewcf-response.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF TextMessageEncoder UTF-8 decoding \u002B FastSoap Plan \u00A76.1 \u0026 \u00A711",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-03A",
+      "files": [
+        "negative/neg03a-malformed-utf8.request.bin",
+        "negative/neg03a-malformed-utf8.corewcf-response.bin",
+        "negative/neg03a-malformed-utf8.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg03a-malformed-utf8.request.bin": "80d13593172064829252023ec5099a5e6b7bf6e09941294d91af6c5b1fa7ab9b",
+        "negative/neg03a-malformed-utf8.corewcf-response.bin": "4a98c1bb1afc03a0a21ad158f48d78c6626841a26110e6dbfd440861353b15de"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF.Primitives.Tests.MessageTests.InvalidCharToString",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-03B",
+      "files": [
+        "negative/neg03b-invalid-xml10-char.request.bin",
+        "negative/neg03b-invalid-xml10-char.corewcf-response.bin",
+        "negative/neg03b-invalid-xml10-char.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg03b-invalid-xml10-char.request.bin": "be95398466f711f59a0817da56d2da0540fde94b8454d85c8536dc2561cc7e3d",
+        "negative/neg03b-invalid-xml10-char.corewcf-response.bin": "6c0244c0dd543d7e7f849cc71a71965ad77f3402245f4fdc56a14c34625400f9"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF Envelope/Message reader validation \u002B FastSoap Plan \u00A76.2",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-04",
+      "files": [
+        "negative/neg04-duplicate-body-soap11.request.xml",
+        "negative/neg04-duplicate-body-soap11.corewcf-response.bin",
+        "negative/neg04-duplicate-body-soap11.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg04-duplicate-body-soap11.request.xml": "cb7e59726b4581a2eacb92879e8ebeafaaaf1e83b0289eb1a6483db8dedbb279",
+        "negative/neg04-duplicate-body-soap11.corewcf-response.bin": "fedbd5b1e77c5acd16a8f2e63e941b7bd63baa192d8a9b3abbf462cef70c2288"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF Envelope/Message reader validation \u002B FastSoap Plan \u00A76.2",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-05",
+      "files": [
+        "negative/neg05-wrong-ordering-soap11.request.xml",
+        "negative/neg05-wrong-ordering-soap11.corewcf-response.bin",
+        "negative/neg05-wrong-ordering-soap11.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg05-wrong-ordering-soap11.request.xml": "2351bf92929cd99b4f835d0d267fc1be8780da2d304238c4accdc60281301b16",
+        "negative/neg05-wrong-ordering-soap11.corewcf-response.bin": "7292a07555211bac3c435ea28ff15a1738ea4ffea2c58a3a009190f85f49246f"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF MessageHeaders.UnderstoodHeaders / MustUnderstand processing \u002B FastSoap Plan \u00A76.3",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-06A",
+      "files": [
+        "negative/neg06a-unknown-mustunderstand-soap11.request.xml",
+        "negative/neg06a-unknown-mustunderstand-soap11.corewcf-response.bin",
+        "negative/neg06a-unknown-mustunderstand-soap11.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg06a-unknown-mustunderstand-soap11.request.xml": "a7f0f01f88b7e397559886daef25d32df5167fae3dcd8ae86a9a0830dbb744ee",
+        "negative/neg06a-unknown-mustunderstand-soap11.corewcf-response.bin": "9e49662578d505e44787f16b132ad7ab9c45934555e52510b01fdfec6e304f5d"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF SOAP 1.2 MustUnderstand \u002B NotUnderstood header semantics \u002B FastSoap Plan \u00A76.3",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-06B",
+      "files": [
+        "negative/neg06b-unknown-mustunderstand-soap12.request.xml",
+        "negative/neg06b-unknown-mustunderstand-soap12.corewcf-response.bin",
+        "negative/neg06b-unknown-mustunderstand-soap12.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg06b-unknown-mustunderstand-soap12.request.xml": "9a828001ed50c741fb2b7ddea4d8e922a1ae223b054a0c83d52caf5b11aee54c",
+        "negative/neg06b-unknown-mustunderstand-soap12.corewcf-response.bin": "f7a8d073e8a8bf13c31cb2427949f02149ab52a9d47f984fd0a855f1c615085c"
+      },
+      "wireProfile": "Soap12"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF.Http.Tests.OpActionReplyActionBehaviorTests \u002B FastSoap Plan \u00A74 \u0026 \u00A76.1",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-07",
+      "files": [
+        "negative/neg07-action-body-mismatch-soap11.request.xml",
+        "negative/neg07-action-body-mismatch-soap11.corewcf-response.bin",
+        "negative/neg07-action-body-mismatch-soap11.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg07-action-body-mismatch-soap11.request.xml": "3f69eaf83013e43ebb3a59c6b3769b4aad7133d2239df64ff05168dcf37ce114",
+        "negative/neg07-action-body-mismatch-soap11.corewcf-response.bin": "9e49662578d505e44787f16b132ad7ab9c45934555e52510b01fdfec6e304f5d"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF.Http.Tests.RequestDelegateHandlerMaxBodySizeTests \u0026 LargeRequestTests (65536 default quota)",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-08",
+      "files": [
+        "negative/neg08-oversized-payload-soap11.request.xml",
+        "negative/neg08-oversized-payload-soap11.corewcf-response.bin",
+        "negative/neg08-oversized-payload-soap11.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg08-oversized-payload-soap11.request.xml": "0133a57a9b9323287bab9db3462a614a6057b0c2a514413ec9dac92915e3e36a",
+        "negative/neg08-oversized-payload-soap11.corewcf-response.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF TextMessageEncoder UTF-8 encoding enforcement \u002B FastSoap Plan \u00A76.1",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-09",
+      "files": [
+        "negative/neg09-utf16-encoding-mismatch.request.xml",
+        "negative/neg09-utf16-encoding-mismatch.corewcf-response.bin",
+        "negative/neg09-utf16-encoding-mismatch.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg09-utf16-encoding-mismatch.request.xml": "4e62ae4c726e313c06f397c10251c674b825cb7e12cd210cf1c4d83140351ce8",
+        "negative/neg09-utf16-encoding-mismatch.corewcf-response.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF Message.CreateMessage envelope check \u002B FastSoap Plan \u00A76.2",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-10",
+      "files": [
+        "negative/neg10-non-envelope-root.request.xml",
+        "negative/neg10-non-envelope-root.corewcf-response.bin",
+        "negative/neg10-non-envelope-root.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg10-non-envelope-root.request.xml": "2eb252fad687ce2100c3452f1c5ecdffd4aebd8163dedbad4de169df0f61941b",
+        "negative/neg10-non-envelope-root.corewcf-response.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF XmlReader trailing content rejection \u002B FastSoap Plan \u00A75.2 \u0026 \u00A76.2",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-11",
+      "files": [
+        "negative/neg11-trailing-root.request.xml",
+        "negative/neg11-trailing-root.corewcf-response.bin",
+        "negative/neg11-trailing-root.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg11-trailing-root.request.xml": "7337dda060170b24d0240442592691bac9625f79f5fad966783715f30dc8bc2c",
+        "negative/neg11-trailing-root.corewcf-response.bin": "ce0ca8e25f0e82a1ea8b1576ce75980bc6fd2f541064c352a013c66bc8c5c94e"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF BasicHttpBinding missing SOAPAction handling \u002B FastSoap Plan \u00A76.1",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-12",
+      "files": [
+        "negative/neg12-missing-soapaction-soap11.request.xml",
+        "negative/neg12-missing-soapaction-soap11.corewcf-response.bin",
+        "negative/neg12-missing-soapaction-soap11.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg12-missing-soapaction-soap11.request.xml": "1efaf76acd9b64a85f1206124a53fa39769ac32a8cc3e4f4f731767d489e5db3",
+        "negative/neg12-missing-soapaction-soap11.corewcf-response.bin": "4eed183212160f74eabddf06d3d89c14611eee86f7dae928b66421b372fb4200"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF.Http.Tests.MessageVersionsTests \u002B FastSoap Plan \u00A76.1 \u0026 \u00A76.4",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-13",
+      "files": [
+        "negative/neg13-version-mismatch-soap12-on-soap11.request.xml",
+        "negative/neg13-version-mismatch-soap12-on-soap11.corewcf-response.bin",
+        "negative/neg13-version-mismatch-soap12-on-soap11.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg13-version-mismatch-soap12-on-soap11.request.xml": "5b2a111b9d9f5740823652ae9df16373023a1acc5677e6ccde6df0c3c79efa0f",
+        "negative/neg13-version-mismatch-soap12-on-soap11.corewcf-response.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "SOAP 1.1 \u00A73 / SOAP 1.2 Part 1 \u00A75 (prohibited processing instructions) \u002B FastSoap Plan \u00A76.2 \u0026 ADR-001 \u00A73.3",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-14A",
+      "files": [
+        "negative/neg14a-pi-in-envelope.request.xml",
+        "negative/neg14a-pi-in-envelope.corewcf-response.bin",
+        "negative/neg14a-pi-in-envelope.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg14a-pi-in-envelope.request.xml": "7154c0a1c1fc2c32b979b9e6d472c25981711473be0e4d8356445a434e28d261",
+        "negative/neg14a-pi-in-envelope.corewcf-response.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "SOAP 1.1 \u00A73 / SOAP 1.2 Part 1 \u00A75 \u002B ADR-001 \u00A73.2 #1(h) \u0026 \u00A73.3 BLOCKER-2",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-14B",
+      "files": [
+        "negative/neg14b-pi-in-body.request.xml",
+        "negative/neg14b-pi-in-body.corewcf-response.bin",
+        "negative/neg14b-pi-in-body.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg14b-pi-in-body.request.xml": "71ebb2f8a10ef0e18399d774fa59ae6b7d1a9c37c45c4a66d1bebf9c87f02dcb",
+        "negative/neg14b-pi-in-body.corewcf-response.bin": "6caa381ae849bfbaaa6fdc7641a9696b4390fdbcd18f317e8da86c1186250d61"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF TextMessageEncoder (XML 1.0 only) \u002B FastSoap Plan \u00A76.2 \u0026 ADR-001 \u00A73.3 BLOCKER-2",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-15",
+      "files": [
+        "negative/neg15-xml11-declaration.request.xml",
+        "negative/neg15-xml11-declaration.corewcf-response.bin",
+        "negative/neg15-xml11-declaration.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg15-xml11-declaration.request.xml": "cf3c5b8fada9e34ab0c7e4dfb68162be3837088d80fa80074b137d0b67176d7d",
+        "negative/neg15-xml11-declaration.corewcf-response.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF TextMessageEncoder UTF-8 BOM validation \u002B FastSoap Plan \u00A76.1 \u0026 ADR-001 \u00A73.3 BLOCKER-2",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-16A",
+      "files": [
+        "negative/neg16a-truncated-utf8-bom.request.bin",
+        "negative/neg16a-truncated-utf8-bom.corewcf-response.bin",
+        "negative/neg16a-truncated-utf8-bom.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg16a-truncated-utf8-bom.request.bin": "6c6fd549ca1a990fe4151bf3e13520aa215241532be3550bac8723e877e2d41f",
+        "negative/neg16a-truncated-utf8-bom.corewcf-response.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF TextMessageEncoder BOM/charset validation \u002B FastSoap Plan \u00A76.1 \u0026 ADR-001 \u00A73.3 BLOCKER-2",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-16B",
+      "files": [
+        "negative/neg16b-utf16-bom-utf8-charset.request.bin",
+        "negative/neg16b-utf16-bom-utf8-charset.corewcf-response.bin",
+        "negative/neg16b-utf16-bom-utf8-charset.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg16b-utf16-bom-utf8-charset.request.bin": "efb314ffbc260467e7feac1894fd43a6190a38d8a6e063f7b80ff9ffdbb63a3c",
+        "negative/neg16b-utf16-bom-utf8-charset.corewcf-response.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "FastSoap Plan \u00A71.1 \u0026 \u00A76.2 \u002B ADR-001 \u00A73.2 #2 \u0026 \u00A73.3 BLOCKER-2",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-17A",
+      "files": [
+        "negative/neg17a-encoding-style-envelope-soap11.request.xml",
+        "negative/neg17a-encoding-style-envelope-soap11.corewcf-response.bin",
+        "negative/neg17a-encoding-style-envelope-soap11.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg17a-encoding-style-envelope-soap11.request.xml": "c0e6d9f436110bf609cd30f3eec5ed822f7982ee1226182905c30e3608a65452",
+        "negative/neg17a-encoding-style-envelope-soap11.corewcf-response.bin": "d9a75d3d0cbd8ee745432026137132a181381d4c0a9aa96c89878a4c43fb27f6"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "FastSoap Plan \u00A71.1 \u0026 \u00A76.2 \u002B ADR-001 \u00A73.2 #2 \u0026 \u00A73.3 BLOCKER-2",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-17B",
+      "files": [
+        "negative/neg17b-encoding-style-body-soap11.request.xml",
+        "negative/neg17b-encoding-style-body-soap11.corewcf-response.bin",
+        "negative/neg17b-encoding-style-body-soap11.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg17b-encoding-style-body-soap11.request.xml": "9d070ee230e4f4c2b92d7f4642df17c6cae858882916c3ab3de7ce8e7e1790ef",
+        "negative/neg17b-encoding-style-body-soap11.corewcf-response.bin": "d9a75d3d0cbd8ee745432026137132a181381d4c0a9aa96c89878a4c43fb27f6"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "CoreWCF XmlDictionaryReaderQuotas.MaxDepth \u002B FastSoap Plan \u00A78 \u0026 ADR-001 \u00A73.3 BLOCKER-2",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-18A",
+      "files": [
+        "negative/neg18a-excessive-depth-soap11.request.xml",
+        "negative/neg18a-excessive-depth-soap11.corewcf-response.bin",
+        "negative/neg18a-excessive-depth-soap11.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg18a-excessive-depth-soap11.request.xml": "22bccb8e59e4e409f6611e894eb8a71084613305d362ca81cfd19b7b0b688251",
+        "negative/neg18a-excessive-depth-soap11.corewcf-response.bin": "b83fd5c549b861c6a45d1e51f2165d4f33bceadcc5e8297d675be134b7f270fb"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "FastSoap Plan \u00A78 \u0026 ADR-001 \u00A73.2 #1 (MaxAttributeCount=64) \u0026 \u00A73.3 BLOCKER-2",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-18B",
+      "files": [
+        "negative/neg18b-excessive-attributes-soap11.request.xml",
+        "negative/neg18b-excessive-attributes-soap11.corewcf-response.bin",
+        "negative/neg18b-excessive-attributes-soap11.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg18b-excessive-attributes-soap11.request.xml": "a270b62358313d9e99e4d30cca31856f41fbe790606b99ca0a5735cbdb855054",
+        "negative/neg18b-excessive-attributes-soap11.corewcf-response.bin": "d9a75d3d0cbd8ee745432026137132a181381d4c0a9aa96c89878a4c43fb27f6"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "FastSoap Plan \u00A76.3 \u0026 \u00A78 (MaxHeaderCount=32) \u002B ADR-001 \u00A73.2 #2 \u0026 \u00A73.3 BLOCKER-2",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-18C",
+      "files": [
+        "negative/neg18c-excessive-header-count-soap11.request.xml",
+        "negative/neg18c-excessive-header-count-soap11.corewcf-response.bin",
+        "negative/neg18c-excessive-header-count-soap11.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg18c-excessive-header-count-soap11.request.xml": "43f22c32eacdd45deef57cce7e9bcefe568ec024973a11188ce0446ac990a837",
+        "negative/neg18c-excessive-header-count-soap11.corewcf-response.bin": "d9a75d3d0cbd8ee745432026137132a181381d4c0a9aa96c89878a4c43fb27f6"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "FastSoap Plan \u00A76.3 \u0026 \u00A78 (MaxHeaderBytes=64KiB) \u002B ADR-001 \u00A73.2 #2 \u0026 \u00A73.3 BLOCKER-2",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-18D",
+      "files": [
+        "negative/neg18d-oversized-header-block-soap11.request.xml",
+        "negative/neg18d-oversized-header-block-soap11.corewcf-response.bin",
+        "negative/neg18d-oversized-header-block-soap11.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg18d-oversized-header-block-soap11.request.xml": "68ac43d4cea8cef14739e81db782ebf71883214ca11303e340bbb35d2f5dbbb4",
+        "negative/neg18d-oversized-header-block-soap11.corewcf-response.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "negative",
+      "coreWcfMapping": "FastSoap Plan \u00A77.2 \u0026 \u00A711 (duplicate fields) \u002B ADR-001 \u00A73.2 #1 \u0026 \u00A73.3 BLOCKER-2",
+      "expectedOutcome": "excluded",
+      "fixtureId": "NEG-19",
+      "files": [
+        "negative/neg19-duplicate-dto-element-soap11.request.xml",
+        "negative/neg19-duplicate-dto-element-soap11.corewcf-response.bin",
+        "negative/neg19-duplicate-dto-element-soap11.meta.json"
+      ],
+      "serializer": "None",
+      "sha256ByFile": {
+        "negative/neg19-duplicate-dto-element-soap11.request.xml": "acc4626ef31475dd1d8870dc2ab2485e0c9c9ebdebcb4dcfa4db62ac82274f9c",
+        "negative/neg19-duplicate-dto-element-soap11.corewcf-response.bin": "48206cf032443c728b23ddb9211d51af475a6207e8b7151d9b92f59f11d7915c"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "serializer",
+      "coreWcfMapping": "CoreWCF.DataContractSerialization.TestCorpus.SanityPrimitives \u002B CoreWCF.Primitives.Tests.SerializationTests",
+      "expectedOutcome": "supported",
+      "fixtureId": "SER-DCS-ECHO",
+      "files": [
+        "serializers/dcs/echo-string.xml"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "serializers/dcs/echo-string.xml": "95e2fbaae847def3d127291d320db8d36ad00106a6c0be1d7f7f91c4686fdc10"
+      },
+      "wireProfile": "PayloadFragment"
+    },
+    {
+      "category": "serializer",
+      "coreWcfMapping": "CoreWCF.Http.Tests.ComplexSerializationTests.DataContractNameSpaceComplexSerialization",
+      "expectedOutcome": "supported",
+      "fixtureId": "SER-DCS-TRANSFER-DEFAULT",
+      "files": [
+        "serializers/dcs/transfer-request-default.xml"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "serializers/dcs/transfer-request-default.xml": "56f4a209f36f40de5e4c7cd4215b8039a9be97da6dc3c1ac0c63acc4985f9e67"
+      },
+      "wireProfile": "PayloadFragment"
+    },
+    {
+      "category": "serializer",
+      "coreWcfMapping": "CoreWCF.DataContractSerialization.TestCorpus.SanityCustomNaming \u002B SanityMemberAttributes",
+      "expectedOutcome": "supported",
+      "fixtureId": "SER-DCS-TRANSFER-URN",
+      "files": [
+        "serializers/dcs/transfer-request-urnpayments.xml"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "serializers/dcs/transfer-request-urnpayments.xml": "41fd1560370d59d6a8897f0d36d0cf83f2cef8dfb6087788dc624fc10605b23e"
+      },
+      "wireProfile": "PayloadFragment"
+    },
+    {
+      "category": "serializer",
+      "coreWcfMapping": "CoreWCF.DataContractSerialization.TestCorpus.SanityNullable",
+      "expectedOutcome": "supported",
+      "fixtureId": "SER-DCS-TRANSFER-NIL",
+      "files": [
+        "serializers/dcs/transfer-request-urnpayments-nil.xml"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "serializers/dcs/transfer-request-urnpayments-nil.xml": "2f5d245d682a10fc49ca581ac530b06a3dbd95e33590580dcf1c363d1b8017e3"
+      },
+      "wireProfile": "PayloadFragment"
+    },
+    {
+      "category": "serializer",
+      "coreWcfMapping": "CoreWCF.DataContractSerialization.TestCorpus.SanityEnums \u002B SanityDateAndTimeOnly",
+      "expectedOutcome": "supported",
+      "fixtureId": "SER-DCS-TRANSFER-RESULT",
+      "files": [
+        "serializers/dcs/transfer-result-urnpayments.xml"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "serializers/dcs/transfer-result-urnpayments.xml": "145466dd392bba162917bd27e61bfab175e7ce4b5bd427646f8611e4b7e07a94"
+      },
+      "wireProfile": "PayloadFragment"
+    },
+    {
+      "category": "serializer",
+      "coreWcfMapping": "CoreWCF.DataContractSerialization.TestCorpus.SanityCollections",
+      "expectedOutcome": "supported",
+      "fixtureId": "SER-DCS-BATCH-TRANSFER",
+      "files": [
+        "serializers/dcs/batch-transfer-request.xml"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "serializers/dcs/batch-transfer-request.xml": "3141d4a839c0e56dd2470fdf2d121078dc9d6af624e19e7471d6013db0d0cf36"
+      },
+      "wireProfile": "PayloadFragment"
+    },
+    {
+      "category": "serializer",
+      "coreWcfMapping": "CoreWCF.Http.Tests.FaultContractTests.DatacontractFaults",
+      "expectedOutcome": "supported",
+      "fixtureId": "SER-DCS-PAYMENT-FAULT",
+      "files": [
+        "serializers/dcs/payment-fault-detail.xml"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "serializers/dcs/payment-fault-detail.xml": "f78e249bc796d26dfd8bf83131cad82bcc95e4823c4c2764b31fc773b0d23a26"
+      },
+      "wireProfile": "PayloadFragment"
+    },
+    {
+      "category": "serializer",
+      "coreWcfMapping": "CoreWCF.Http.Tests.ServiceWithCoreWCFXmlSerializerFormatTest",
+      "expectedOutcome": "supported",
+      "fixtureId": "SER-XML-ECHO",
+      "files": [
+        "serializers/xmlserializer/echo-string.xml"
+      ],
+      "serializer": "XmlSerializer",
+      "sha256ByFile": {
+        "serializers/xmlserializer/echo-string.xml": "2497b420cc84556788a2a46622a155d9b2f416185a71845e34058dfe92582b7a"
+      },
+      "wireProfile": "PayloadFragment"
+    },
+    {
+      "category": "serializer",
+      "coreWcfMapping": "CoreWCF.Http.Tests.ServiceWithCoreWCFXmlSerializerFormatTest \u002B FastSoap Plan \u00A73.2",
+      "expectedOutcome": "supported",
+      "fixtureId": "SER-XML-TRANSFER-URN",
+      "files": [
+        "serializers/xmlserializer/transfer-request-urnpayments.xml"
+      ],
+      "serializer": "XmlSerializer",
+      "sha256ByFile": {
+        "serializers/xmlserializer/transfer-request-urnpayments.xml": "22f2448328ccdcaac86a4e53c1f2cd831f4157c3c6d71d6eae5970072ae7ed9e"
+      },
+      "wireProfile": "PayloadFragment"
+    },
+    {
+      "category": "serializer",
+      "coreWcfMapping": "CoreWCF.Http.Tests.ServiceWithCoreWCFXmlSerializerFormatTest (IsNullable=true)",
+      "expectedOutcome": "supported",
+      "fixtureId": "SER-XML-TRANSFER-NIL",
+      "files": [
+        "serializers/xmlserializer/transfer-request-urnpayments-nil.xml"
+      ],
+      "serializer": "XmlSerializer",
+      "sha256ByFile": {
+        "serializers/xmlserializer/transfer-request-urnpayments-nil.xml": "08448e47e28d7f8bf6d484d09dfe1b7a82755f965f45d949027e81666a9c8890"
+      },
+      "wireProfile": "PayloadFragment"
+    },
+    {
+      "category": "serializer",
+      "coreWcfMapping": "CoreWCF.Http.Tests.ServiceWithCoreWCFXmlSerializerFormatTest \u002B FastSoap Plan \u00A73.2",
+      "expectedOutcome": "supported",
+      "fixtureId": "SER-XML-TRANSFER-RESULT",
+      "files": [
+        "serializers/xmlserializer/transfer-result-urnpayments.xml"
+      ],
+      "serializer": "XmlSerializer",
+      "sha256ByFile": {
+        "serializers/xmlserializer/transfer-result-urnpayments.xml": "d37da14ab1adf4257500f50dbc72f75b40907683d58832294af90905265d65e4"
+      },
+      "wireProfile": "PayloadFragment"
+    },
+    {
+      "category": "serializer",
+      "coreWcfMapping": "CoreWCF.Http.Tests.ServiceWithCoreWCFXmlSerializerFormatTest (collections)",
+      "expectedOutcome": "supported",
+      "fixtureId": "SER-XML-BATCH-TRANSFER",
+      "files": [
+        "serializers/xmlserializer/batch-transfer-request.xml"
+      ],
+      "serializer": "XmlSerializer",
+      "sha256ByFile": {
+        "serializers/xmlserializer/batch-transfer-request.xml": "fd490844c6608c278c04df8ef263387bc435648d5f4218926ce843cfadd59a23"
+      },
+      "wireProfile": "PayloadFragment"
+    },
+    {
+      "category": "wsdl",
+      "coreWcfMapping": "CoreWCF.Metadata.Tests.BasicHttpSimpleServiceTest.BasicHttpRequestReplyEchoString",
+      "expectedOutcome": "supported",
+      "fixtureId": "WSDL-ECHO-SOAP11",
+      "files": [
+        "wsdl/echo-soap11.single.wsdl",
+        "wsdl/echo-soap11.wsdl",
+        "wsdl/echo-soap11.xsd0.xsd",
+        "wsdl/echo-soap11.xsd1.xsd"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "wsdl/echo-soap11.single.wsdl": "876e75687abac2e043471d71004e52a2eeac9d9a2944336c2bb27798df122bd0",
+        "wsdl/echo-soap11.wsdl": "ef0f08993127a1b1736d414771c41d2b594712256d5fa1ee4c4dbf917d14c062",
+        "wsdl/echo-soap11.xsd0.xsd": "6d608953bb714307445fd0a1016de6e6b46af9162e5f4172cb21a02454bb4549",
+        "wsdl/echo-soap11.xsd1.xsd": "47f0284c8e12a267b1256d383b05eac5ba04129b226177b842672bcd826c3409"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "wsdl",
+      "coreWcfMapping": "CoreWCF.Metadata.Tests.ComplexTypesWithCollectionsService \u002B DataTypesTest",
+      "expectedOutcome": "supported",
+      "fixtureId": "WSDL-PAYMENT-DCS-SOAP11",
+      "files": [
+        "wsdl/payment-dcs-soap11.single.wsdl",
+        "wsdl/payment-dcs-soap11.wsdl",
+        "wsdl/payment-dcs-soap11.wsdl0.wsdl",
+        "wsdl/payment-dcs-soap11.xsd0.xsd",
+        "wsdl/payment-dcs-soap11.xsd1.xsd"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "wsdl/payment-dcs-soap11.single.wsdl": "724de637f9569d189363d1183856b8d7df22dbac94433c11ee4123e6e34fd2dc",
+        "wsdl/payment-dcs-soap11.wsdl": "841adbbb075f2b40927cf5d152e9523a96138a4bae142f40a5f40fb3fdfebd4b",
+        "wsdl/payment-dcs-soap11.wsdl0.wsdl": "a73e2bb6bf7924cf66c868086a3a1ae721a035def2ecc0f539e37bcf8304295e",
+        "wsdl/payment-dcs-soap11.xsd0.xsd": "51b741df26853d2dd72f15261fac566922efbbf026bcf578e2024d5b1365ff87",
+        "wsdl/payment-dcs-soap11.xsd1.xsd": "47f0284c8e12a267b1256d383b05eac5ba04129b226177b842672bcd826c3409"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "wsdl",
+      "coreWcfMapping": "CoreWCF.Metadata.Tests.XmlSerializerFormatSoapTest",
+      "expectedOutcome": "supported",
+      "fixtureId": "WSDL-PAYMENT-XMLSER-SOAP11",
+      "files": [
+        "wsdl/payment-xmlser-soap11.single.wsdl"
+      ],
+      "serializer": "XmlSerializer",
+      "sha256ByFile": {
+        "wsdl/payment-xmlser-soap11.single.wsdl": "1402bb890ca6801c296b6b94d6b0134cc3b082f83ad919a628166d013b5890a9"
+      },
+      "wireProfile": "Soap11"
+    },
+    {
+      "category": "wsdl",
+      "coreWcfMapping": "CoreWCF.Metadata.Tests.Helpers.WsdlHelper (soap12 extensions)",
+      "expectedOutcome": "supported",
+      "fixtureId": "WSDL-PAYMENT-DCS-SOAP12",
+      "files": [
+        "wsdl/payment-dcs-soap12.single.wsdl"
+      ],
+      "serializer": "DataContractSerializer",
+      "sha256ByFile": {
+        "wsdl/payment-dcs-soap12.single.wsdl": "7087fbba65758dc481740a5301eeb194c09583a445082e1ec225907b3ef4799e"
+      },
+      "wireProfile": "Soap12"
+    }
+  ],
+  "oracleVersions": {
+    "CoreWCF.Http": "1.9.0.0",
+    "CoreWCF.Primitives": "1.9.0.0",
+    "System.ServiceModel.Http": "10.0.0.0",
+    "Runtime": "10.0.15"
+  },
+  "schemaVersion": "1.0.0"
+}

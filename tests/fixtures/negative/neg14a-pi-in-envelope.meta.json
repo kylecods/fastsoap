@@ -1,0 +1,14 @@
+{
+  "coreWcfMapping": "SOAP 1.1 \u00A73 / SOAP 1.2 Part 1 \u00A75 (prohibited processing instructions) \u002B FastSoap Plan \u00A76.2 \u0026 ADR-001 \u00A73.3",
+  "expectedOutcome": "excluded",
+  "fastSoapNote": "Reject processing instruction inside SOAP envelope (HTTP 400 / Client fault); zero service invocations",
+  "fixtureId": "NEG-14A",
+  "path": "/soap11/echo-dcs.svc",
+  "requestSha256": "7154c0a1c1fc2c32b979b9e6d472c25981711473be0e4d8356445a434e28d261",
+  "requestContentType": "text/xml; charset=utf-8",
+  "requestSoapAction": "\u0022http://tempuri.org/IEchoService/EchoString\u0022",
+  "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "responseStatusCode": 400,
+  "serializer": "None",
+  "soapVersion": "Soap11"
+}

@@ -10,10 +10,6 @@ Performance reference guide: `docs/references/blazing-fast-dotnet.md` (from [Ego
 ## 1. Non-Negotiable Repository Rules
 
 - **Do NOT commit changes.** Never run `git commit`, `git push`, or amend commits. Leave all changes uncommitted in the working tree.
-- **Model & Role Policy:**
-  - **Research & Coding:** Strictly use **Gemini 4 Hydrogen (High)** (`gemini-4-hydrogen-high`).
-  - **Code & Architecture Review:** Strictly use **Gemini 4 Neon (High)** (`gemini-4-neon-high`).
-  - **Agent Spawning:** Strictly use the Orca CLI (`orca agent launch`).
 - **No Measurements Out of Thin Air:** Never invent, extrapolate, or claim performance numbers, allocation counts, throughput, or compatibility percentages without running an actual reproducible benchmark or test on this machine and recording the exact command, environment, SDK/runtime, and observed output.
 - **Test Against Existing CoreWCF Test Suites for Accuracy:** Validate wire compatibility, SOAP 1.1/1.2 protocol semantics, headers, faults, and serialization accuracy against real CoreWCF test suites and reference serializers (JIT-only oracle tests). Never assume WCF/CoreWCF wire shapes; capture and verify against actual CoreWCF behavior and test cases. Never count skipped or unsupported cases as passing.
 - **No Reflection Fallback / No AOT Warning Suppression:**
@@ -45,9 +41,9 @@ Performance reference guide: `docs/references/blazing-fast-dotnet.md` (from [Ego
 
 ---
 
-## 3. Formatting & Code Organization (XmlEssentials Style)
+## 3. Formatting & Code Organization
 
-All C# code must conform to `.editorconfig` and the following rules derived from [CloudNimble/XmlEssentials AGENTS.md](https://github.com/CloudNimble/XmlEssentials/blob/main/AGENTS.md):
+All C# code must conform to `.editorconfig`:
 
 - **Namespaces & Usings:**
   - Prefer **normal block-scoped namespace declarations** (`namespace FastSoap.Core { ... }`), **NOT** file-scoped namespaces.
@@ -77,7 +73,7 @@ All C# code must conform to `.editorconfig` and the following rules derived from
 
 ---
 
-## 4. High-Performance .NET Rules (BlazingFastDotnet)
+## 4. High-Performance .NET Rules
 
 Check all hot-path code against `docs/references/blazing-fast-dotnet.md`:
 

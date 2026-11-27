@@ -491,3 +491,11 @@ $RECYCLE.BIN/
 # and the test runner GdUnit4's adapter writes as the tests run.
 .godot/
 gdunit4_testadapter_v5/
+
+# Non-architecture internal planning, research, reference, review, and report docs
+docs/FastSoap-Implementation-Plan-v2.md
+docs/performance.md
+docs/review-neon-final.md
+docs/adr/
+docs/references/
+docs/research/

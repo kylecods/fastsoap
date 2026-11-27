@@ -1,0 +1,277 @@
+name: Pack and Publish NuGet
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Optional NuGet package version override (e.g., 0.1.0 or 0.1.0-preview.1)'
+        required: false
+        type: string
+      publish_nuget:
+        description: 'Publish packages to NuGet.org'
+        required: false
+        type: boolean
+        default: false
+      publish_github_packages:
+        description: 'Publish packages to GitHub Packages'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build-test-pack:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      package_version: ${{ steps.version.outputs.package_version }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            10.0.x
+            11.0.x
+
+      - name: Resolve package version
+        id: version
+        shell: bash
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          if [[ -n "$INPUT_VERSION" ]]; then
+            VERSION="$INPUT_VERSION"
+          elif [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF#refs/tags/v}"
+          else
+            VERSION="0.1.0-ci.${GITHUB_RUN_NUMBER}"
+          fi
+
+          echo "package_version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Resolved package version: $VERSION"
+
+      - name: Restore solution
+        run: dotnet restore FastSoap.slnx
+
+      - name: Build solution
+        run: dotnet build FastSoap.slnx -c Release --no-restore
+
+      - name: Run tests
+        run: dotnet test FastSoap.slnx -c Release --no-build -m:1
+
+      - name: Pack NuGet packages
+        env:
+          PACKAGE_VERSION: ${{ steps.version.outputs.package_version }}
+        run: dotnet pack FastSoap.slnx -c Release --no-build -o artifacts/packages -p:PackageVersion="$PACKAGE_VERSION"
+
+      - name: Verify package consumer smoke test
+        shell: bash
+        env:
+          PACKAGE_VERSION: ${{ steps.version.outputs.package_version }}
+        run: |
+          set -euo pipefail
+
+          nupkg_count=$(find artifacts/packages -maxdepth 1 -name '*.nupkg' | wc -l)
+          if [[ "$nupkg_count" -ne 5 ]]; then
+            echo "Expected 5 .nupkg files in artifacts/packages, found $nupkg_count"
+            ls -la artifacts/packages
+            exit 1
+          fi
+
+          consumer_dir="/tmp/fastsoap-consumer"
+          rm -rf "$consumer_dir"
+          mkdir -p "$consumer_dir"
+
+          cat > "$consumer_dir/nuget.config" <<EOF
+          <?xml version="1.0" encoding="utf-8"?>
+          <configuration>
+            <packageSources>
+              <clear />
+              <add key="local-fastsoap" value="${GITHUB_WORKSPACE}/artifacts/packages" />
+              <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+            </packageSources>
+          </configuration>
+          EOF
+
+          cat > "$consumer_dir/Consumer.csproj" <<EOF
+          <Project Sdk="Microsoft.NET.Sdk.Web">
+            <PropertyGroup>
+              <TargetFramework>net10.0</TargetFramework>
+              <LangVersion>15</LangVersion>
+              <Nullable>enable</Nullable>
+              <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+            </PropertyGroup>
+            <ItemGroup>
+              <PackageReference Include="FastSoap.AspNetCore" Version="${PACKAGE_VERSION}" />
+              <PackageReference Include="FastSoap.Generators" Version="${PACKAGE_VERSION}" PrivateAssets="all" />
+            </ItemGroup>
+          </Project>
+          EOF
+
+          cat > "$consumer_dir/Program.cs" <<'EOF'
+          using System.Threading;
+          using System.Threading.Tasks;
+
+          using CloudNimble.Text.Xml.Serialization;
+
+          using FastSoap.Abstractions;
+          using FastSoap.AspNetCore;
+
+          using Microsoft.AspNetCore.Builder;
+          using Microsoft.Extensions.DependencyInjection;
+
+          namespace FastSoap.PackageSmokeConsumer
+          {
+
+              [XmlRoot(ElementName = "Echo", Namespace = "urn:smoke")]
+              public sealed class EchoRequest
+              {
+                  [XmlElement(ElementName = "Message", Namespace = "urn:smoke")]
+                  public required string Message { get; init; }
+              }
+
+              [XmlRoot(ElementName = "EchoResponse", Namespace = "urn:smoke")]
+              public sealed class EchoResponse
+              {
+                  [XmlElement(ElementName = "EchoResult", Namespace = "urn:smoke")]
+                  public required string EchoResult { get; init; }
+              }
+
+              [XmlSerializable<EchoRequest>]
+              [XmlSerializable<EchoResponse>]
+              public partial class SmokeXmlContext : XmlSerializerContext
+              {
+              }
+
+              [SoapService(Name = "SmokeService", Namespace = "urn:smoke")]
+              [SoapWireContract(typeof(SmokeXmlContext))]
+              public interface ISmokeService
+              {
+                  [SoapOperation(
+                      Action = "urn:smoke/ISmokeService/Echo",
+                      ReplyAction = "urn:smoke/ISmokeService/EchoResponse")]
+                  [SoapWireContract(
+                      RequestType = typeof(EchoRequest),
+                      ResponseType = typeof(EchoResponse))]
+                  Task<EchoResponse> EchoAsync(EchoRequest request, CancellationToken cancellationToken);
+              }
+
+              public sealed class SmokeService : ISmokeService
+              {
+                  public Task<EchoResponse> EchoAsync(EchoRequest request, CancellationToken cancellationToken)
+                  {
+                      return Task.FromResult(new EchoResponse { EchoResult = request.Message });
+                  }
+              }
+
+              public static class Program
+              {
+                  public static void Main(string[] args)
+                  {
+                      WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(args);
+                      builder.Services.AddFastSoap();
+                      builder.Services.AddScoped<ISmokeService, SmokeService>();
+
+                      WebApplication app = builder.Build();
+                      app.MapSmokeService("/Smoke.svc");
+                  }
+              }
+
+          }
+          EOF
+
+          dotnet restore "$consumer_dir/Consumer.csproj" \
+            --configfile "$consumer_dir/nuget.config" \
+            --packages "$consumer_dir/.packages"
+          dotnet build "$consumer_dir/Consumer.csproj" -c Release --no-restore
+
+          rm -rf "$consumer_dir"
+
+      - name: Upload NuGet packages artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fastsoap-nuget-packages
+          path: artifacts/packages
+          if-no-files-found: error
+
+  publish-nuget:
+    needs: build-test-pack
+    runs-on: ubuntu-latest
+    environment: nuget-release
+    permissions:
+      contents: read
+      id-token: write
+    if: ${{ startsWith(github.ref, 'refs/tags/v') || inputs.publish_nuget == true }}
+
+    steps:
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '11.0.x'
+
+      - name: Download NuGet packages artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: fastsoap-nuget-packages
+          path: packages
+
+      - name: Validate NuGet Trusted Publishing username
+        shell: bash
+        env:
+          NUGET_USER: ${{ vars.NUGET_USER }}
+        run: |
+          if [[ -z "$NUGET_USER" ]]; then
+            echo "::error::NUGET_USER variable is not configured for the 'nuget-release' environment (or repository variables)."
+            exit 1
+          fi
+
+      - name: Authenticate with NuGet Trusted Publishing (OIDC)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ vars.NUGET_USER }}
+
+      - name: Push packages to NuGet.org
+        shell: bash
+        env:
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
+        run: |
+          dotnet nuget push "packages/*.nupkg" \
+            --api-key "$NUGET_API_KEY" \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+
+  publish-github-packages:
+    needs: build-test-pack
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    if: ${{ inputs.publish_github_packages == true }}
+
+    steps:
+      - name: Download NuGet packages artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: fastsoap-nuget-packages
+          path: packages
+
+      - name: Push packages to GitHub Packages
+        shell: bash
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: ${{ github.repository_owner }}
+        run: |
+          dotnet nuget push "packages/*.nupkg" \
+            --api-key "$GH_PACKAGES_TOKEN" \
+            --source "https://nuget.pkg.github.com/${REPO_OWNER}/index.json" \
+            --skip-duplicate

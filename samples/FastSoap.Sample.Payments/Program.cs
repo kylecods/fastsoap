@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,6 +14,7 @@ using FastSoap.Sample.Payments.Contracts;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FastSoap.Sample.Payments
@@ -85,8 +88,22 @@ namespace FastSoap.Sample.Payments
                 return context.Response.WriteAsync("ok", context.RequestAborted);
             });
 
+            Uri publicBaseUri = ResolvePublicBaseUri(builder.Configuration);
+            SoapServiceMetadata metadata = CreateSampleMetadata();
+            SoapMetadataAddressPolicy generatedAddressPolicy = CreateAddressPolicy(publicBaseUri, "/PaymentService.svc");
+            SoapMetadataAddressPolicy manualAddressPolicy = CreateAddressPolicy(publicBaseUri, "/manual/PaymentService.svc");
+
             // 1. Source-generated endpoint registration (emits /PaymentService.svc via FastSoap.Generators)
-            app.MapPaymentService("/PaymentService.svc");
+            app.MapPaymentService("/PaymentService.svc", soap =>
+            {
+                soap.ConfigureOptions(static options =>
+                {
+                    options.EnabledVersions = SoapVersionFlags.Both;
+                    options.EnableMetadata = true;
+                });
+
+                soap.MapGeneratedMetadata(metadata, generatedAddressPolicy, SoapWsdlGenerationMode.ExternalSchemas);
+            });
 
             // 2. Equivalent manual registration with explicit metadata and strict XmlSerializerOptions
             XmlSerializerOptions strictOptions = new XmlSerializerOptions
@@ -104,9 +121,6 @@ namespace FastSoap.Sample.Payments
                 new SoapQName("urn:echo", "Echo"),
                 new SoapQName("urn:echo", "EchoResponse"));
 
-            SoapServiceMetadata metadata = CreateSampleMetadata();
-            SoapMetadataAddressPolicy addressPolicy = new SoapMetadataAddressPolicy("https://payments.example.com/manual/PaymentService.svc");
-
             app.MapSoap("/manual/PaymentService.svc", soap =>
             {
                 soap.ConfigureOptions(static options =>
@@ -115,7 +129,7 @@ namespace FastSoap.Sample.Payments
                     options.EnableMetadata = true;
                 });
 
-                soap.MapGeneratedMetadata(metadata, addressPolicy, SoapWsdlGenerationMode.ExternalSchemas);
+                soap.MapGeneratedMetadata(metadata, manualAddressPolicy, SoapWsdlGenerationMode.ExternalSchemas);
 
                 soap.MapOperation(
                     descriptor: echoDescriptor,
@@ -147,6 +161,16 @@ namespace FastSoap.Sample.Payments
         #endregion
 
         #region Private Methods
+
+        private static SoapMetadataAddressPolicy CreateAddressPolicy(Uri publicBaseUri, string endpointPath)
+        {
+            string baseAddress = publicBaseUri
+                .GetComponents(UriComponents.SchemeAndServer | UriComponents.Path, UriFormat.UriEscaped)
+                .TrimEnd('/');
+            string normalizedPath = endpointPath.StartsWith('/') ? endpointPath : $"/{endpointPath}";
+
+            return new SoapMetadataAddressPolicy($"{baseAddress}{normalizedPath}");
+        }
 
         private static SoapServiceMetadata CreateSampleMetadata()
         {
@@ -195,6 +219,86 @@ namespace FastSoap.Sample.Payments
                 operations: [transferOp],
                 supportedVersions: SoapVersionFlags.Both,
                 portTypeName: "IPaymentService");
+        }
+
+        private static Uri ResolvePublicBaseUri(IConfiguration configuration)
+        {
+            ArgumentNullException.ThrowIfNull(configuration);
+
+            string? configuredBaseUrl = configuration["FastSoap:PublicBaseUrl"];
+            if (!string.IsNullOrWhiteSpace(configuredBaseUrl))
+            {
+                if (!TryCreatePublicBaseUri(configuredBaseUrl, out Uri? explicitBaseUri))
+                {
+                    throw new InvalidOperationException(
+                        "Configuration value 'FastSoap:PublicBaseUrl' must be an absolute non-wildcard HTTP or HTTPS URI without userinfo, query, or fragment.");
+                }
+
+                return explicitBaseUri;
+            }
+
+            string? configuredUrls = configuration["urls"];
+            if (!string.IsNullOrWhiteSpace(configuredUrls))
+            {
+                string[] candidates = configuredUrls.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                for (int index = 0; index < candidates.Length; index++)
+                {
+                    if (TryCreatePublicBaseUri(candidates[index], out Uri? urlCandidate))
+                    {
+                        return urlCandidate;
+                    }
+                }
+            }
+
+            return new Uri("http://localhost:5000", UriKind.Absolute);
+        }
+
+        private static bool TryCreatePublicBaseUri(
+            string? value,
+            [NotNullWhen(true)] out Uri? uri)
+        {
+            uri = null;
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return false;
+            }
+
+            string trimmed = value.Trim();
+            if (!Uri.TryCreate(trimmed, UriKind.Absolute, out Uri? candidate))
+            {
+                return false;
+            }
+
+            if (!string.Equals(candidate.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase)
+                && !string.Equals(candidate.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(candidate.Host)
+                || !string.IsNullOrWhiteSpace(candidate.UserInfo)
+                || !string.IsNullOrWhiteSpace(candidate.Query)
+                || !string.IsNullOrWhiteSpace(candidate.Fragment))
+            {
+                return false;
+            }
+
+            if (string.Equals(candidate.Host, "*", StringComparison.Ordinal)
+                || string.Equals(candidate.Host, "+", StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            if (IPAddress.TryParse(candidate.DnsSafeHost, out IPAddress? ipAddress)
+                && (ipAddress.Equals(IPAddress.Any) || ipAddress.Equals(IPAddress.IPv6Any)))
+            {
+                return false;
+            }
+
+            uri = candidate;
+
+            return true;
         }
 
         #endregion

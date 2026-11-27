@@ -1,6 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <Description>Core abstractions, contract attributes, descriptors, options, and SOAP fault types for FastSoap.</Description>
+    <PackageTags>soap;wcf;aot;utf8;abstractions;fastsoap</PackageTags>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IsAotCompatible>true</IsAotCompatible>
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>

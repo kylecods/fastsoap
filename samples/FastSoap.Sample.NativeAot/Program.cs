@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,6 +14,7 @@ using FastSoap.Sample.NativeAot.Contracts;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FastSoap.Sample.NativeAot
@@ -82,7 +85,21 @@ namespace FastSoap.Sample.NativeAot
                 return context.Response.WriteAsync("ok", context.RequestAborted);
             });
 
-            app.MapNativePaymentService("/NativePaymentService.svc");
+            Uri publicBaseUri = ResolvePublicBaseUri(builder.Configuration);
+            SoapServiceMetadata metadata = CreateSampleMetadata();
+            SoapMetadataAddressPolicy nativeAddressPolicy = CreateAddressPolicy(publicBaseUri, "/NativePaymentService.svc");
+            SoapMetadataAddressPolicy serviceAddressPolicy = CreateAddressPolicy(publicBaseUri, "/Service.svc");
+
+            app.MapNativePaymentService("/NativePaymentService.svc", soap =>
+            {
+                soap.ConfigureOptions(static options =>
+                {
+                    options.EnabledVersions = SoapVersionFlags.Both;
+                    options.EnableMetadata = true;
+                });
+
+                soap.MapGeneratedMetadata(metadata, nativeAddressPolicy, SoapWsdlGenerationMode.InlineSchemas);
+            });
 
             XmlSerializerOptions strictOptions = new XmlSerializerOptions
             {
@@ -99,35 +116,6 @@ namespace FastSoap.Sample.NativeAot
                 new SoapQName("urn:echo", "Echo"),
                 new SoapQName("urn:echo", "EchoResponse"));
 
-            SoapServiceMetadata metadata = new SoapServiceMetadata(
-                serviceName: "NativePaymentService",
-                targetNamespace: "urn:payments",
-                operations:
-                [
-                    new SoapOperationMetadata(
-                        NativePaymentServiceSoapContract.Transfer,
-                        SoapSchemaElement.CreateWrapped(
-                            new SoapQName("urn:payments", "Transfer"),
-                            [SoapSchemaElement.CreateMember("request", SoapSchemaType.Complex(
-                                new SoapQName("urn:payments", "TransferRequest"),
-                                [
-                                    SoapSchemaElement.CreateMember("AccountNumber", SoapSchemaType.String),
-                                    SoapSchemaElement.CreateMember("Amount", SoapSchemaType.Decimal)
-                                ]), minOccurs: 0, isNillable: true)]),
-                        SoapSchemaElement.CreateWrapped(
-                            new SoapQName("urn:payments", "TransferResponse"),
-                            [SoapSchemaElement.CreateMember("TransferResult", SoapSchemaType.Complex(
-                                new SoapQName("urn:payments", "TransferResult"),
-                                [
-                                    SoapSchemaElement.CreateMember("TransactionId", SoapSchemaType.String),
-                                    SoapSchemaElement.CreateMember("Successful", SoapSchemaType.Boolean)
-                                ]), minOccurs: 0, isNillable: true)]))
-                ],
-                supportedVersions: SoapVersionFlags.Both,
-                portTypeName: "INativePaymentService");
-
-            SoapMetadataAddressPolicy addressPolicy = new SoapMetadataAddressPolicy("https://aot.example.com/Service.svc");
-
             app.MapSoap("/Service.svc", soap =>
             {
                 soap.ConfigureOptions(static options =>
@@ -136,7 +124,7 @@ namespace FastSoap.Sample.NativeAot
                     options.EnableMetadata = true;
                 });
 
-                soap.MapGeneratedMetadata(metadata, addressPolicy, SoapWsdlGenerationMode.InlineSchemas);
+                soap.MapGeneratedMetadata(metadata, serviceAddressPolicy, SoapWsdlGenerationMode.InlineSchemas);
 
                 soap.MapOperation(
                     descriptor: echoDescriptor,
@@ -163,6 +151,130 @@ namespace FastSoap.Sample.NativeAot
             });
 
             await app.RunAsync().ConfigureAwait(false);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private static SoapMetadataAddressPolicy CreateAddressPolicy(Uri publicBaseUri, string endpointPath)
+        {
+            string baseAddress = publicBaseUri
+                .GetComponents(UriComponents.SchemeAndServer | UriComponents.Path, UriFormat.UriEscaped)
+                .TrimEnd('/');
+            string normalizedPath = endpointPath.StartsWith('/') ? endpointPath : $"/{endpointPath}";
+
+            return new SoapMetadataAddressPolicy($"{baseAddress}{normalizedPath}");
+        }
+
+        private static SoapServiceMetadata CreateSampleMetadata()
+        {
+            return new SoapServiceMetadata(
+                serviceName: "NativePaymentService",
+                targetNamespace: "urn:payments",
+                operations:
+                [
+                    new SoapOperationMetadata(
+                        NativePaymentServiceSoapContract.Transfer,
+                        SoapSchemaElement.CreateWrapped(
+                            new SoapQName("urn:payments", "Transfer"),
+                            [SoapSchemaElement.CreateMember("request", SoapSchemaType.Complex(
+                                new SoapQName("urn:payments", "TransferRequest"),
+                                [
+                                    SoapSchemaElement.CreateMember("AccountNumber", SoapSchemaType.String),
+                                    SoapSchemaElement.CreateMember("Amount", SoapSchemaType.Decimal)
+                                ]), minOccurs: 0, isNillable: true)]),
+                        SoapSchemaElement.CreateWrapped(
+                            new SoapQName("urn:payments", "TransferResponse"),
+                            [SoapSchemaElement.CreateMember("TransferResult", SoapSchemaType.Complex(
+                                new SoapQName("urn:payments", "TransferResult"),
+                                [
+                                    SoapSchemaElement.CreateMember("TransactionId", SoapSchemaType.String),
+                                    SoapSchemaElement.CreateMember("Successful", SoapSchemaType.Boolean)
+                                ]), minOccurs: 0, isNillable: true)]))
+                ],
+                supportedVersions: SoapVersionFlags.Both,
+                portTypeName: "INativePaymentService");
+        }
+
+        private static Uri ResolvePublicBaseUri(IConfiguration configuration)
+        {
+            ArgumentNullException.ThrowIfNull(configuration);
+
+            string? configuredBaseUrl = configuration["FastSoap:PublicBaseUrl"];
+            if (!string.IsNullOrWhiteSpace(configuredBaseUrl))
+            {
+                if (!TryCreatePublicBaseUri(configuredBaseUrl, out Uri? explicitBaseUri))
+                {
+                    throw new InvalidOperationException(
+                        "Configuration value 'FastSoap:PublicBaseUrl' must be an absolute non-wildcard HTTP or HTTPS URI without userinfo, query, or fragment.");
+                }
+
+                return explicitBaseUri;
+            }
+
+            string? configuredUrls = configuration["urls"];
+            if (!string.IsNullOrWhiteSpace(configuredUrls))
+            {
+                string[] candidates = configuredUrls.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                for (int index = 0; index < candidates.Length; index++)
+                {
+                    if (TryCreatePublicBaseUri(candidates[index], out Uri? urlCandidate))
+                    {
+                        return urlCandidate;
+                    }
+                }
+            }
+
+            return new Uri("http://localhost:5000", UriKind.Absolute);
+        }
+
+        private static bool TryCreatePublicBaseUri(
+            string? value,
+            [NotNullWhen(true)] out Uri? uri)
+        {
+            uri = null;
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return false;
+            }
+
+            string trimmed = value.Trim();
+            if (!Uri.TryCreate(trimmed, UriKind.Absolute, out Uri? candidate))
+            {
+                return false;
+            }
+
+            if (!string.Equals(candidate.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase)
+                && !string.Equals(candidate.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(candidate.Host)
+                || !string.IsNullOrWhiteSpace(candidate.UserInfo)
+                || !string.IsNullOrWhiteSpace(candidate.Query)
+                || !string.IsNullOrWhiteSpace(candidate.Fragment))
+            {
+                return false;
+            }
+
+            if (string.Equals(candidate.Host, "*", StringComparison.Ordinal)
+                || string.Equals(candidate.Host, "+", StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            if (IPAddress.TryParse(candidate.DnsSafeHost, out IPAddress? ipAddress)
+                && (ipAddress.Equals(IPAddress.Any) || ipAddress.Equals(IPAddress.IPv6Any)))
+            {
+                return false;
+            }
+
+            uri = candidate;
+
+            return true;
         }
 
         #endregion

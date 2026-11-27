@@ -1,6 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <Description>Static and generated WSDL 1.1 and XSD metadata serving with ETag caching and configured address policy for FastSoap.</Description>
+    <PackageTags>soap;wsdl;xsd;metadata;aot;fastsoap</PackageTags>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IsAotCompatible>true</IsAotCompatible>
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>

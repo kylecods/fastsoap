@@ -1,6 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <Description>ASP.NET Core endpoint hosting, routing, authorization, telemetry, and metadata middleware for FastSoap SOAP 1.1 and 1.2 services.</Description>
+    <PackageTags>soap;aspnetcore;kestrel;wcf;aot;utf8;fastsoap</PackageTags>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IsAotCompatible>true</IsAotCompatible>
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>

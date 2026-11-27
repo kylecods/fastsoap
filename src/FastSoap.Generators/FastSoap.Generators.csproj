@@ -7,6 +7,9 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <IsPackable>true</IsPackable>
+    <IncludeSymbols>false</IncludeSymbols>
+    <Description>Roslyn incremental source generator and compile-time contract diagnostics (FS0001-FS0008) for FastSoap SOAP services.</Description>
+    <PackageTags>soap;roslyn;source-generator;analyzer;aot;fastsoap</PackageTags>
     <DevelopmentDependency>true</DevelopmentDependency>
     <IsRoslynComponent>true</IsRoslynComponent>
     <RootNamespace>FastSoap.Generators</RootNamespace>
@@ -27,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    <None Include="$(OutputPath)/$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
   </ItemGroup>
 
 </Project>

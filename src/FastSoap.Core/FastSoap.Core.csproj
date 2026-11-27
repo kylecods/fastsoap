@@ -1,6 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <Description>UTF-8-native, Native AOT-compatible SOAP 1.1 and SOAP 1.2 protocol engine, buffer management, and XmlEssentials serialization adapter for FastSoap.</Description>
+    <PackageTags>soap;soap11;soap12;wcf;aot;utf8;xml;fastsoap</PackageTags>
     <IsAotCompatible>true</IsAotCompatible>
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
     <EnableAotAnalyzer>true</EnableAotAnalyzer>

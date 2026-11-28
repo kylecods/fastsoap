@@ -225,7 +225,7 @@ namespace FastSoap.ProtocolTests
         #region Fields
 
         private static readonly ProtocolXmlContext s_context = new ProtocolXmlContext(
-            XmlEssentialsAdapter.SharedSerializerOptions);
+            XmlEssentialsAdapter.CreateStrictSerializerOptions());
 
         #endregion
 

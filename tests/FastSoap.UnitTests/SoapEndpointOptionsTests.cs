@@ -26,9 +26,13 @@ namespace FastSoap.UnitTests
             Assert.Equal(64, options.MaxAttributesPerElement);
             Assert.Equal(1024, options.MaxActionLength);
             Assert.Equal(SoapVersionFlags.Soap11, options.EnabledVersions);
+            Assert.False(options.AllowCompressedRequests);
             Assert.False(options.AllowMissingSoap11Action);
+            Assert.False(options.EnableDirectResponseStreaming);
             Assert.False(options.EnableMetadata);
+            Assert.False(options.EnableResponseCompression);
             Assert.True(options.ClearPooledBuffers);
+            Assert.Equal(1024, options.ResponseCompressionMinBytes);
 
             options.Validate();
         }
@@ -94,6 +98,18 @@ namespace FastSoap.UnitTests
 
             SoapEndpointOptions negativeHeaderCount = new SoapEndpointOptions { MaxHeaderCount = -1 };
             Assert.Equal(nameof(SoapEndpointOptions.MaxHeaderCount), Assert.Throws<ArgumentOutOfRangeException>(negativeHeaderCount.Validate).ParamName);
+
+            SoapEndpointOptions negativeCompressionMinBytes = new SoapEndpointOptions { ResponseCompressionMinBytes = -1 };
+            Assert.Equal(nameof(SoapEndpointOptions.ResponseCompressionMinBytes), Assert.Throws<ArgumentOutOfRangeException>(negativeCompressionMinBytes.Validate).ParamName);
+
+            SoapEndpointOptions validCompressionOptions = new SoapEndpointOptions
+            {
+                AllowCompressedRequests = true,
+                EnableResponseCompression = true,
+                EnableDirectResponseStreaming = true,
+                ResponseCompressionMinBytes = 0
+            };
+            validCompressionOptions.Validate();
         }
 
         #endregion

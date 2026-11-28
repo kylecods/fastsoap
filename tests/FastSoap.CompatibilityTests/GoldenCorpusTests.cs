@@ -424,7 +424,7 @@ namespace FastSoap.CompatibilityTests
                 Assert.Equal(1, host.ServiceInvocations);
                 Assert.Single(host.ApiKeyHeaderHandler.Headers);
                 Assert.Equal(
-                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"><s:Body><EchoHeaderResponse xmlns=\"http://tempuri.org/\"><SayHello>Saying Hello Message Hello</SayHello></EchoHeaderResponse></s:Body></s:Envelope>",
+                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><s:Body><EchoHeaderResponse xmlns=\"http://tempuri.org/\"><SayHello>Saying Hello Message Hello</SayHello></EchoHeaderResponse></s:Body></s:Envelope>",
                     actualBody);
 
                 return false;
@@ -435,7 +435,7 @@ namespace FastSoap.CompatibilityTests
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
                 Assert.Equal(1, host.ServiceInvocations);
                 Assert.Equal(
-                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"><s:Body><EchoStringResponse xmlns=\"http://tempuri.org/\"><EchoStringResult>hello</EchoStringResult></EchoStringResponse></s:Body></s:Envelope>",
+                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><s:Body><EchoStringResponse xmlns=\"http://tempuri.org/\"><EchoStringResult>hello</EchoStringResult></EchoStringResponse></s:Body></s:Envelope>",
                     actualBody);
 
                 return true;
@@ -446,7 +446,7 @@ namespace FastSoap.CompatibilityTests
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
                 Assert.Equal(1, host.ServiceInvocations);
                 Assert.Equal(
-                    "<s:Envelope xmlns:s=\"http://www.w3.org/2003/05/soap-envelope\"><s:Body><EchoStringResponse xmlns=\"http://tempuri.org/\"><EchoStringResult>hello</EchoStringResult></EchoStringResponse></s:Body></s:Envelope>",
+                    "<s:Envelope xmlns:s=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><s:Body><EchoStringResponse xmlns=\"http://tempuri.org/\"><EchoStringResult>hello</EchoStringResult></EchoStringResponse></s:Body></s:Envelope>",
                     actualBody);
 
                 return true;

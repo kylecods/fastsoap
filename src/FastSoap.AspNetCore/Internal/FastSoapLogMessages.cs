@@ -85,6 +85,20 @@ namespace FastSoap.AspNetCore.Internal
             string endpointPattern,
             Exception exception);
 
+        [LoggerMessage(
+            EventId = 1008,
+            Level = LogLevel.Error,
+            Message = "Unhandled exception staged as sanitized SOAP fault on endpoint '{EndpointPattern}' (Operation={OperationName}, Version={SoapVersion}, StatusCode={StatusCode}, FaultKind={FaultKind}, FailureStage={FailureStage}).")]
+        internal static partial void UnhandledProcessingFault(
+            ILogger logger,
+            string endpointPattern,
+            string operationName,
+            string soapVersion,
+            int statusCode,
+            string faultKind,
+            string failureStage,
+            Exception exception);
+
         #endregion
 
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Pipelines;
 using System.Net;
 using System.Security.Claims;
@@ -72,9 +73,25 @@ namespace FastSoap.Core.Dispatching
         public string? ContentType { get; }
 
         /// <summary>
+        /// Gets the number of UTF-8 bytes written when <see cref="IsDirectStreamed"/> is <see langword="true"/>.
+        /// </summary>
+        public long DirectStreamedBytes { get; }
+
+        /// <summary>
+        /// Gets the optional internal failure stage tag when <see cref="UnhandledException"/> is non-null.
+        /// </summary>
+        public string? FailureStage { get; }
+
+        /// <summary>
         /// Gets the normalized SOAP fault classification if a SOAP fault was produced; otherwise <see langword="null"/>.
         /// </summary>
         public SoapFaultKind? FaultKind { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the response was streamed directly to the transport <see cref="PipeWriter"/>
+        /// without a staging buffer.
+        /// </summary>
+        public bool IsDirectStreamed { get; }
 
         /// <summary>
         /// Gets a value indicating whether the business operation handler was invoked.
@@ -86,6 +103,11 @@ namespace FastSoap.Core.Dispatching
         /// </summary>
         public int StatusCode { get; }
 
+        /// <summary>
+        /// Gets the underlying unhandled exception when a sanitized internal fault was staged; otherwise <see langword="null"/>.
+        /// </summary>
+        public Exception? UnhandledException { get; }
+
         #endregion
 
         #region Constructors
@@ -96,7 +118,11 @@ namespace FastSoap.Core.Dispatching
             ReadOnlyMemory<byte> body,
             BoundedPooledBufferWriter? stagedWriter,
             bool serviceInvoked,
-            SoapFaultKind? faultKind)
+            SoapFaultKind? faultKind,
+            Exception? unhandledException = null,
+            string? failureStage = null,
+            bool isDirectStreamed = false,
+            long directStreamedBytes = 0)
         {
             StatusCode = statusCode;
             ContentType = contentType;
@@ -104,6 +130,10 @@ namespace FastSoap.Core.Dispatching
             _stagedWriter = stagedWriter;
             ServiceInvoked = serviceInvoked;
             FaultKind = faultKind;
+            UnhandledException = unhandledException;
+            FailureStage = failureStage;
+            IsDirectStreamed = isDirectStreamed;
+            DirectStreamedBytes = directStreamedBytes;
         }
 
         #endregion
@@ -236,8 +266,10 @@ namespace FastSoap.Core.Dispatching
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            if (!string.IsNullOrWhiteSpace(metadata.ContentEncoding) &&
-                !string.Equals(metadata.ContentEncoding.Trim(), "identity", StringComparison.OrdinalIgnoreCase))
+            if (!SoapCompressionCodec.TryParseRequestContentEncoding(
+                metadata.ContentEncoding,
+                _options.AllowCompressedRequests,
+                out SoapCompressionEncoding requestEncoding))
             {
                 return ValueTask.FromResult(CreateHttpOnlyError(HttpStatusCode.UnsupportedMediaType, serviceInvoked: false));
             }
@@ -260,6 +292,20 @@ namespace FastSoap.Core.Dispatching
                 return ValueTask.FromResult(CreateHttpOnlyError(ex.HttpStatusCode, serviceInvoked: false));
             }
 
+            if (requestEncoding != SoapCompressionEncoding.Identity)
+            {
+                return ProcessCompressedAsync(
+                    contentTypeInfo,
+                    metadata.SoapAction,
+                    metadata.HasMultipleSoapActionHeaders,
+                    metadata.CorrelationId,
+                    requestUtf8,
+                    requestEncoding,
+                    services,
+                    user,
+                    cancellationToken);
+            }
+
             return ProcessCoreAsync(
                 contentTypeInfo,
                 metadata.SoapAction,
@@ -268,6 +314,9 @@ namespace FastSoap.Core.Dispatching
                 requestUtf8,
                 services,
                 user,
+                directResponseWriter: null,
+                startResponseAsync: null,
+                startResponseState: null,
                 cancellationToken);
         }
 
@@ -303,12 +352,113 @@ namespace FastSoap.Core.Dispatching
                 requestUtf8,
                 services,
                 user,
+                directResponseWriter: null,
+                startResponseAsync: null,
+                startResponseState: null,
+                cancellationToken);
+        }
+
+        internal ValueTask<SoapProcessingResult> ProcessParsedDirectAsync(
+            SoapContentTypeInfo contentTypeInfo,
+            string? soapAction,
+            bool hasMultipleSoapActionHeaders,
+            string? correlationId,
+            ReadOnlyMemory<byte> requestUtf8,
+            IServiceProvider services,
+            ClaimsPrincipal user,
+            PipeWriter directResponseWriter,
+            Func<object?, string, CancellationToken, ValueTask> startResponseAsync,
+            object? startResponseState,
+            CancellationToken cancellationToken = default)
+        {
+            ArgumentNullException.ThrowIfNull(services);
+            ArgumentNullException.ThrowIfNull(user);
+            ArgumentNullException.ThrowIfNull(directResponseWriter);
+            ArgumentNullException.ThrowIfNull(startResponseAsync);
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (requestUtf8.Length > _options.MaxRequestBytes)
+            {
+                return ValueTask.FromResult(CreateHttpOnlyError(HttpStatusCode.RequestEntityTooLarge, serviceInvoked: false));
+            }
+
+            return ProcessCoreAsync(
+                contentTypeInfo,
+                soapAction,
+                hasMultipleSoapActionHeaders,
+                correlationId,
+                requestUtf8,
+                services,
+                user,
+                directResponseWriter,
+                startResponseAsync,
+                startResponseState,
                 cancellationToken);
         }
 
         #endregion
 
         #region Private Methods
+
+        private static int GetFaultStatusCode(SoapVersion version, SoapFaultKind faultKind)
+        {
+            if (version == SoapVersion.Soap11)
+            {
+                return (int)HttpStatusCode.InternalServerError;
+            }
+
+            return faultKind == SoapFaultKind.Sender
+                ? (int)HttpStatusCode.BadRequest
+                : (int)HttpStatusCode.InternalServerError;
+        }
+
+        private async ValueTask<SoapProcessingResult> ProcessCompressedAsync(
+            SoapContentTypeInfo contentTypeInfo,
+            string? soapAction,
+            bool hasMultipleSoapActionHeaders,
+            string? correlationId,
+            ReadOnlyMemory<byte> compressedRequest,
+            SoapCompressionEncoding requestEncoding,
+            IServiceProvider services,
+            ClaimsPrincipal user,
+            CancellationToken cancellationToken)
+        {
+            SoapRequestBuffer decompressed;
+            try
+            {
+                decompressed = SoapCompressionCodec.Decompress(
+                    compressedRequest,
+                    requestEncoding,
+                    _options.MaxRequestBytes,
+                    _options.ClearPooledBuffers,
+                    _pool);
+            }
+            catch (RequestQuotaExceededException)
+            {
+                return CreateHttpOnlyError(HttpStatusCode.RequestEntityTooLarge, serviceInvoked: false);
+            }
+            catch (InvalidDataException)
+            {
+                return CreateHttpOnlyError(HttpStatusCode.BadRequest, serviceInvoked: false);
+            }
+
+            using (decompressed)
+            {
+                return await ProcessCoreAsync(
+                    contentTypeInfo,
+                    soapAction,
+                    hasMultipleSoapActionHeaders,
+                    correlationId,
+                    decompressed.Memory,
+                    services,
+                    user,
+                    directResponseWriter: null,
+                    startResponseAsync: null,
+                    startResponseState: null,
+                    cancellationToken).ConfigureAwait(false);
+            }
+        }
 
         private async ValueTask<SoapProcessingResult> ProcessCoreAsync(
             SoapContentTypeInfo contentTypeInfo,
@@ -318,6 +468,9 @@ namespace FastSoap.Core.Dispatching
             ReadOnlyMemory<byte> requestUtf8,
             IServiceProvider services,
             ClaimsPrincipal user,
+            PipeWriter? directResponseWriter,
+            Func<object?, string, CancellationToken, ValueTask>? startResponseAsync,
+            object? startResponseState,
             CancellationToken cancellationToken)
         {
             PreparedSoapCall preparedCall;
@@ -372,6 +525,17 @@ namespace FastSoap.Core.Dispatching
 
                 return CreateResultFromProtocolException(ex, correlationId, notUnderstoodHeaders, serviceInvoked: false);
             }
+            catch (SoapFaultException ex)
+            {
+                SoapFault structuredFault = ex.ToSoapFault(contentTypeInfo.Version, correlationId);
+                int statusCode = (int?)ex.HttpStatusCode ?? GetFaultStatusCode(contentTypeInfo.Version, ex.FaultKind);
+
+                return StageFaultResult(
+                    statusCode,
+                    structuredFault,
+                    notUnderstoodHeaders: null,
+                    serviceInvoked: false);
+            }
             catch (Exception ex)
             {
                 SoapFault safeFault = SoapFaultWriter.CreateSafeFaultForException(
@@ -383,7 +547,86 @@ namespace FastSoap.Core.Dispatching
                     (int)HttpStatusCode.InternalServerError,
                     safeFault,
                     notUnderstoodHeaders: null,
-                    serviceInvoked: false);
+                    serviceInvoked: false,
+                    unhandledException: ex,
+                    failureStage: "header_processing");
+            }
+
+            string responseContentType = contentTypeInfo.Version == SoapVersion.Soap11
+                ? SoapConstants.Soap11ResponseContentType
+                : SoapConstants.Soap12ResponseContentType;
+
+            if (directResponseWriter is not null &&
+                startResponseAsync is not null &&
+                preparedCall.SupportsSplitExecution)
+            {
+                bool responseStarted = false;
+                try
+                {
+                    await preparedCall.ExecuteAsync(cancellationToken).ConfigureAwait(false);
+
+                    responseStarted = true;
+                    await startResponseAsync(startResponseState, responseContentType, cancellationToken).ConfigureAwait(false);
+                    long directBytes = preparedCall.WriteDirectResponse(directResponseWriter);
+
+                    FlushResult flushResult = await directResponseWriter.FlushAsync(cancellationToken).ConfigureAwait(false);
+                    if (flushResult.IsCanceled)
+                    {
+                        throw new OperationCanceledException(cancellationToken);
+                    }
+
+                    return new SoapProcessingResult(
+                        (int)HttpStatusCode.OK,
+                        responseContentType,
+                        ReadOnlyMemory<byte>.Empty,
+                        stagedWriter: null,
+                        serviceInvoked: true,
+                        faultKind: null,
+                        isDirectStreamed: true,
+                        directStreamedBytes: directBytes);
+                }
+                catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+                {
+                    throw;
+                }
+                catch (Exception) when (responseStarted)
+                {
+                    throw;
+                }
+                catch (SoapProtocolException ex)
+                {
+                    return CreateResultFromProtocolException(
+                        ex,
+                        correlationId,
+                        notUnderstoodHeaders: null,
+                        serviceInvoked: true);
+                }
+                catch (SoapFaultException ex)
+                {
+                    SoapFault structuredFault = ex.ToSoapFault(contentTypeInfo.Version, correlationId);
+                    int statusCode = (int?)ex.HttpStatusCode ?? GetFaultStatusCode(contentTypeInfo.Version, ex.FaultKind);
+
+                    return StageFaultResult(
+                        statusCode,
+                        structuredFault,
+                        notUnderstoodHeaders: null,
+                        serviceInvoked: true);
+                }
+                catch (Exception ex)
+                {
+                    SoapFault safeFault = SoapFaultWriter.CreateSafeFaultForException(
+                        contentTypeInfo.Version,
+                        ex,
+                        correlationId);
+
+                    return StageFaultResult(
+                        (int)HttpStatusCode.InternalServerError,
+                        safeFault,
+                        notUnderstoodHeaders: null,
+                        serviceInvoked: true,
+                        unhandledException: ex,
+                        failureStage: "handler");
+                }
             }
 
             BoundedPooledBufferWriter responseWriter = new BoundedPooledBufferWriter(
@@ -391,14 +634,21 @@ namespace FastSoap.Core.Dispatching
                 _options.MaxResponseBytes,
                 _options.ClearPooledBuffers,
                 _pool);
+            bool handlerCompleted = false;
 
             try
             {
-                await preparedCall.ExecuteAndWriteAsync(responseWriter, cancellationToken).ConfigureAwait(false);
-
-                string responseContentType = contentTypeInfo.Version == SoapVersion.Soap11
-                    ? SoapConstants.Soap11ResponseContentType
-                    : SoapConstants.Soap12ResponseContentType;
+                if (preparedCall.SupportsSplitExecution)
+                {
+                    await preparedCall.ExecuteAsync(cancellationToken).ConfigureAwait(false);
+                    handlerCompleted = true;
+                    _ = preparedCall.WriteDirectResponse(responseWriter);
+                }
+                else
+                {
+                    await preparedCall.ExecuteAndWriteAsync(responseWriter, cancellationToken).ConfigureAwait(false);
+                    handlerCompleted = true;
+                }
 
                 SoapProcessingResult successResult = new SoapProcessingResult(
                     (int)HttpStatusCode.OK,
@@ -424,6 +674,17 @@ namespace FastSoap.Core.Dispatching
                     notUnderstoodHeaders: null,
                     serviceInvoked: true);
             }
+            catch (SoapFaultException ex)
+            {
+                SoapFault structuredFault = ex.ToSoapFault(contentTypeInfo.Version, correlationId);
+                int statusCode = (int?)ex.HttpStatusCode ?? GetFaultStatusCode(contentTypeInfo.Version, ex.FaultKind);
+
+                return StageFaultResult(
+                    statusCode,
+                    structuredFault,
+                    notUnderstoodHeaders: null,
+                    serviceInvoked: true);
+            }
             catch (Exception ex)
             {
                 SoapFault safeFault = SoapFaultWriter.CreateSafeFaultForException(
@@ -435,7 +696,9 @@ namespace FastSoap.Core.Dispatching
                     (int)HttpStatusCode.InternalServerError,
                     safeFault,
                     notUnderstoodHeaders: null,
-                    serviceInvoked: true);
+                    serviceInvoked: true,
+                    unhandledException: ex,
+                    failureStage: handlerCompleted ? "response_serialization" : "handler");
             }
             finally
             {
@@ -482,9 +745,15 @@ namespace FastSoap.Core.Dispatching
             int statusCode,
             SoapFault fault,
             IReadOnlyList<SoapQName>? notUnderstoodHeaders,
-            bool serviceInvoked)
+            bool serviceInvoked,
+            Exception? unhandledException = null,
+            string? failureStage = null)
         {
-            int faultLimit = Math.Min(SoapConstants.DefaultFaultBytesLimit, _options.MaxResponseBytes);
+            long desiredFaultLimit = fault.DetailXmlUtf8.IsEmpty
+                ? SoapConstants.DefaultFaultBytesLimit
+                : Math.Max(SoapConstants.DefaultFaultBytesLimit, (long)fault.DetailXmlUtf8.Length + 2048L);
+            int faultLimit = (int)Math.Min(desiredFaultLimit, _options.MaxResponseBytes);
+
             BoundedPooledBufferWriter faultWriter = new BoundedPooledBufferWriter(
                 512,
                 faultLimit,
@@ -505,13 +774,15 @@ namespace FastSoap.Core.Dispatching
                     ReadOnlyMemory<byte>.Empty,
                     faultWriter,
                     serviceInvoked,
-                    fault.Kind);
+                    fault.Kind,
+                    unhandledException,
+                    failureStage);
 
                 faultWriter = null!;
 
                 return result;
             }
-            catch
+            catch (Exception stagingEx)
             {
                 return new SoapProcessingResult(
                     (int)HttpStatusCode.InternalServerError,
@@ -519,7 +790,9 @@ namespace FastSoap.Core.Dispatching
                     ReadOnlyMemory<byte>.Empty,
                     stagedWriter: null,
                     serviceInvoked,
-                    fault.Kind);
+                    fault.Kind,
+                    unhandledException: unhandledException ?? stagingEx,
+                    failureStage: failureStage ?? "fault_staging");
             }
             finally
             {

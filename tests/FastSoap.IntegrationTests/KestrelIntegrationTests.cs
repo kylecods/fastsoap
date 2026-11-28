@@ -86,7 +86,7 @@ namespace FastSoap.IntegrationTests
                 Assert.Equal("text/xml; charset=utf-8", okRes.Content.Headers.ContentType?.ToString());
                 Assert.Equal(1, harness.Counter.TransferCount);
                 Assert.Equal(
-                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"><s:Body><TransferResponse xmlns=\"urn:payments\"><TransferResult><TransactionId>TX-100200</TransactionId><Successful>true</Successful><ProcessedAtUtc>2026-11-26T12:00:00Z</ProcessedAtUtc><Status>Completed</Status></TransferResult></TransferResponse></s:Body></s:Envelope>",
+                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><s:Body><TransferResponse xmlns=\"urn:payments\"><TransferResult><TransactionId>TX-100200</TransactionId><Successful>true</Successful><ProcessedAtUtc>2026-11-26T12:00:00Z</ProcessedAtUtc><Status>Completed</Status></TransferResult></TransferResponse></s:Body></s:Envelope>",
                     await okRes.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
             }
         }
@@ -115,7 +115,7 @@ namespace FastSoap.IntegrationTests
             Assert.Equal(gen11Bytes.Length, gen11Res.Content.Headers.ContentLength);
             Assert.True(manual11Bytes.AsSpan().SequenceEqual(gen11Bytes));
             Assert.Equal(
-                "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"><s:Body><TransferResponse xmlns=\"urn:payments\"><TransferResult><TransactionId>TX-123456</TransactionId><Successful>true</Successful><ProcessedAtUtc>2026-11-26T12:00:00Z</ProcessedAtUtc><Status>Completed</Status></TransferResult></TransferResponse></s:Body></s:Envelope>",
+                "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><s:Body><TransferResponse xmlns=\"urn:payments\"><TransferResult><TransactionId>TX-123456</TransactionId><Successful>true</Successful><ProcessedAtUtc>2026-11-26T12:00:00Z</ProcessedAtUtc><Status>Completed</Status></TransferResult></TransferResponse></s:Body></s:Envelope>",
                 Encoding.UTF8.GetString(manual11Bytes));
 
             byte[] transferRequest12 = "<s:Envelope xmlns:s=\"http://www.w3.org/2003/05/soap-envelope\"><s:Body><Transfer xmlns=\"urn:payments\"><request xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><AccountNumber>789012</AccountNumber><Amount>42.00</Amount><Currency>EUR</Currency><Metadata i:nil=\"true\"/><Note i:nil=\"true\"/></request></Transfer></s:Body></s:Envelope>"u8.ToArray();
@@ -135,7 +135,7 @@ namespace FastSoap.IntegrationTests
             Assert.Equal("application/soap+xml; charset=utf-8", gen12Res.Content.Headers.ContentType?.ToString());
             Assert.True(manual12Bytes.AsSpan().SequenceEqual(gen12Bytes));
             Assert.Equal(
-                "<s:Envelope xmlns:s=\"http://www.w3.org/2003/05/soap-envelope\"><s:Body><TransferResponse xmlns=\"urn:payments\"><TransferResult><TransactionId>TX-789012</TransactionId><Successful>true</Successful><ProcessedAtUtc>2026-11-26T12:00:00Z</ProcessedAtUtc><Status>Completed</Status></TransferResult></TransferResponse></s:Body></s:Envelope>",
+                "<s:Envelope xmlns:s=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><s:Body><TransferResponse xmlns=\"urn:payments\"><TransferResult><TransactionId>TX-789012</TransactionId><Successful>true</Successful><ProcessedAtUtc>2026-11-26T12:00:00Z</ProcessedAtUtc><Status>Completed</Status></TransferResult></TransferResponse></s:Body></s:Envelope>",
                 Encoding.UTF8.GetString(manual12Bytes));
 
             Assert.Equal(4, harness.Counter.TransferCount);
@@ -455,7 +455,7 @@ namespace FastSoap.IntegrationTests
                 Assert.Equal(HttpStatusCode.OK, res11.StatusCode);
                 Assert.Equal("text/xml; charset=utf-8", res11.Content.Headers.ContentType?.ToString());
                 Assert.Equal(
-                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"><s:Body><EchoResponse xmlns=\"urn:echo\"><EchoResult>SENSITIVE_ECHO_SECRET</EchoResult></EchoResponse></s:Body></s:Envelope>",
+                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><s:Body><EchoResponse xmlns=\"urn:echo\"><EchoResult>SENSITIVE_ECHO_SECRET</EchoResult></EchoResponse></s:Body></s:Envelope>",
                     await res11.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
             }
 
@@ -466,7 +466,7 @@ namespace FastSoap.IntegrationTests
                 Assert.Equal(HttpStatusCode.OK, res12.StatusCode);
                 Assert.Equal("application/soap+xml; charset=utf-8", res12.Content.Headers.ContentType?.ToString());
                 Assert.Equal(
-                    "<s:Envelope xmlns:s=\"http://www.w3.org/2003/05/soap-envelope\"><s:Body><EchoResponse xmlns=\"urn:echo\"><EchoResult>soap12-ok</EchoResult></EchoResponse></s:Body></s:Envelope>",
+                    "<s:Envelope xmlns:s=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><s:Body><EchoResponse xmlns=\"urn:echo\"><EchoResult>soap12-ok</EchoResult></EchoResponse></s:Body></s:Envelope>",
                     await res12.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
             }
 

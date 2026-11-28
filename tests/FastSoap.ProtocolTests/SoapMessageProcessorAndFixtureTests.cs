@@ -185,7 +185,7 @@ namespace FastSoap.ProtocolTests
                 Assert.Equal(SoapConstants.Soap11ResponseContentType, echo11Res.ContentType);
                 Assert.True(echo11Res.ServiceInvoked);
                 Assert.Equal(
-                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"><s:Body><EchoStringResponse xmlns=\"http://tempuri.org/\"><EchoStringResult>hello</EchoStringResult></EchoStringResponse></s:Body></s:Envelope>",
+                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><s:Body><EchoStringResponse xmlns=\"http://tempuri.org/\"><EchoStringResult>hello</EchoStringResult></EchoStringResponse></s:Body></s:Envelope>",
                     Encoding.UTF8.GetString(echo11Res.Body.Span));
             }
 
@@ -199,7 +199,7 @@ namespace FastSoap.ProtocolTests
             {
                 Assert.Equal(200, nonAsciiRes.StatusCode);
                 Assert.Equal(
-                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"><s:Body><EchoStringResponse xmlns=\"http://tempuri.org/\"><EchoStringResult>Hello, 世界! € — café 🚀</EchoStringResult></EchoStringResponse></s:Body></s:Envelope>",
+                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><s:Body><EchoStringResponse xmlns=\"http://tempuri.org/\"><EchoStringResult>Hello, 世界! € — café 🚀</EchoStringResult></EchoStringResponse></s:Body></s:Envelope>",
                     Encoding.UTF8.GetString(nonAsciiRes.Body.Span));
             }
 
@@ -213,7 +213,7 @@ namespace FastSoap.ProtocolTests
             {
                 Assert.Equal(200, nilRes.StatusCode);
                 Assert.Equal(
-                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"><s:Body><EchoStringResponse xmlns=\"http://tempuri.org/\"><EchoStringResult xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:nil=\"true\"/></EchoStringResponse></s:Body></s:Envelope>",
+                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><s:Body><EchoStringResponse xmlns=\"http://tempuri.org/\"><EchoStringResult xsi:nil=\"true\"/></EchoStringResponse></s:Body></s:Envelope>",
                     Encoding.UTF8.GetString(nilRes.Body.Span));
             }
 
@@ -231,7 +231,7 @@ namespace FastSoap.ProtocolTests
                     "<h:ApiKey xmlns:h=\"http://tempuri.org/\" xmlns=\"http://tempuri.org/\">DEVKEYTOTEST</h:ApiKey>",
                     Encoding.UTF8.GetString(apiKeyHandler.HandledHeaders[0].RawUtf8Payload.Span));
                 Assert.Equal(
-                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"><s:Body><EchoHeaderResponse xmlns=\"http://tempuri.org/\"><SayHello>Saying Hello Message Hello</SayHello></EchoHeaderResponse></s:Body></s:Envelope>",
+                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><s:Body><EchoHeaderResponse xmlns=\"http://tempuri.org/\"><SayHello>Saying Hello Message Hello</SayHello></EchoHeaderResponse></s:Body></s:Envelope>",
                     Encoding.UTF8.GetString(headerRes.Body.Span));
             }
 
@@ -245,7 +245,7 @@ namespace FastSoap.ProtocolTests
             {
                 Assert.Equal(200, transfer11Res.StatusCode);
                 Assert.Equal(
-                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"><s:Body><TransferResponse xmlns=\"urn:payments\"><TransferResult><TransactionId>TX-001</TransactionId><Successful>true</Successful><ProcessedAtUtc>2026-11-26T12:00:00Z</ProcessedAtUtc><Status>Completed</Status></TransferResult></TransferResponse></s:Body></s:Envelope>",
+                    "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><s:Body><TransferResponse xmlns=\"urn:payments\"><TransferResult><TransactionId>TX-001</TransactionId><Successful>true</Successful><ProcessedAtUtc>2026-11-26T12:00:00Z</ProcessedAtUtc><Status>Completed</Status></TransferResult></TransferResponse></s:Body></s:Envelope>",
                     Encoding.UTF8.GetString(transfer11Res.Body.Span));
             }
 
@@ -260,7 +260,7 @@ namespace FastSoap.ProtocolTests
                 Assert.Equal(200, echo12Res.StatusCode);
                 Assert.Equal(SoapConstants.Soap12ResponseContentType, echo12Res.ContentType);
                 Assert.Equal(
-                    "<s:Envelope xmlns:s=\"http://www.w3.org/2003/05/soap-envelope\"><s:Body><EchoStringResponse xmlns=\"http://tempuri.org/\"><EchoStringResult>hello</EchoStringResult></EchoStringResponse></s:Body></s:Envelope>",
+                    "<s:Envelope xmlns:s=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><s:Body><EchoStringResponse xmlns=\"http://tempuri.org/\"><EchoStringResult>hello</EchoStringResult></EchoStringResponse></s:Body></s:Envelope>",
                     Encoding.UTF8.GetString(echo12Res.Body.Span));
             }
 
@@ -275,7 +275,7 @@ namespace FastSoap.ProtocolTests
                 Assert.Equal(200, transfer12Res.StatusCode);
                 Assert.Equal(SoapConstants.Soap12ResponseContentType, transfer12Res.ContentType);
                 Assert.Equal(
-                    "<s:Envelope xmlns:s=\"http://www.w3.org/2003/05/soap-envelope\"><s:Body><TransferResponse xmlns=\"urn:payments\"><TransferResult><TransactionId>TX-001</TransactionId><Successful>true</Successful><ProcessedAtUtc>2026-11-26T12:00:00Z</ProcessedAtUtc><Status>Completed</Status></TransferResult></TransferResponse></s:Body></s:Envelope>",
+                    "<s:Envelope xmlns:s=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><s:Body><TransferResponse xmlns=\"urn:payments\"><TransferResult><TransactionId>TX-001</TransactionId><Successful>true</Successful><ProcessedAtUtc>2026-11-26T12:00:00Z</ProcessedAtUtc><Status>Completed</Status></TransferResult></TransferResponse></s:Body></s:Envelope>",
                     Encoding.UTF8.GetString(transfer12Res.Body.Span));
             }
 

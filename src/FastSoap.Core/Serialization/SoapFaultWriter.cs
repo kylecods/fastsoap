@@ -217,46 +217,55 @@ namespace FastSoap.Core.Serialization
 
         private static void WriteSoap11Fault(SoapFault fault, IBufferWriter<byte> destination)
         {
-            using Utf8XmlWriter writer = new Utf8XmlWriter(destination, XmlEssentialsAdapter.SharedWriterOptions);
-            writer.WriteStartElement(
-                SoapConstants.EnvelopePrefixUtf8,
-                SoapConstants.EnvelopeLocalNameUtf8,
-                SoapConstants.Soap11NamespaceUtf8);
-            writer.WriteStartElement(
-                SoapConstants.EnvelopePrefixUtf8,
-                SoapConstants.BodyLocalNameUtf8,
-                SoapConstants.Soap11NamespaceUtf8);
-            writer.WriteStartElement(
-                SoapConstants.EnvelopePrefixUtf8,
-                SoapConstants.FaultLocalNameUtf8,
-                SoapConstants.Soap11NamespaceUtf8);
-
-            writer.WriteStartElement("faultcode"u8);
-            WriteQualifiedFaultCodeValue(writer, fault, SoapConstants.Soap11Namespace);
-            writer.WriteEndElement();
-
-            writer.WriteStartElement("faultstring"u8);
-            writer.WriteStringValue(fault.Reason);
-            writer.WriteEndElement();
-
-            if (fault.ActorOrNode is not null)
+            Utf8XmlWriter writer = new Utf8XmlWriter(destination, XmlEssentialsAdapter.SharedWriterOptions);
+            bool completed = false;
+            try
             {
-                writer.WriteStartElement("faultactor"u8);
-                writer.WriteStringValue(fault.ActorOrNode);
-                writer.WriteEndElement();
-            }
+                writer.WriteStartElement(
+                    SoapConstants.EnvelopePrefixUtf8,
+                    SoapConstants.EnvelopeLocalNameUtf8,
+                    SoapConstants.Soap11NamespaceUtf8);
+                writer.WriteStartElement(
+                    SoapConstants.EnvelopePrefixUtf8,
+                    SoapConstants.BodyLocalNameUtf8,
+                    SoapConstants.Soap11NamespaceUtf8);
+                writer.WriteStartElement(
+                    SoapConstants.EnvelopePrefixUtf8,
+                    SoapConstants.FaultLocalNameUtf8,
+                    SoapConstants.Soap11NamespaceUtf8);
 
-            if (!fault.DetailXmlUtf8.IsEmpty)
+                writer.WriteStartElement("faultcode"u8);
+                WriteQualifiedFaultCodeValue(writer, fault, SoapConstants.Soap11Namespace);
+                writer.WriteEndElement();
+
+                writer.WriteStartElement("faultstring"u8);
+                writer.WriteStringValue(fault.Reason);
+                writer.WriteEndElement();
+
+                if (fault.ActorOrNode is not null)
+                {
+                    writer.WriteStartElement("faultactor"u8);
+                    writer.WriteStringValue(fault.ActorOrNode);
+                    writer.WriteEndElement();
+                }
+
+                if (!fault.DetailXmlUtf8.IsEmpty)
+                {
+                    writer.WriteStartElement("detail"u8);
+                    writer.WriteRawValue(fault.DetailXmlUtf8.Span, skipInputValidation: false);
+                    writer.WriteEndElement();
+                }
+
+                writer.WriteEndElement();
+                writer.WriteEndElement();
+                writer.WriteEndElement();
+                writer.Flush();
+                completed = true;
+            }
+            finally
             {
-                writer.WriteStartElement("detail"u8);
-                writer.WriteRawValue(fault.DetailXmlUtf8.Span, skipInputValidation: false);
-                writer.WriteEndElement();
+                XmlEssentialsAdapter.DisposeSafely(writer, completed);
             }
-
-            writer.WriteEndElement();
-            writer.WriteEndElement();
-            writer.WriteEndElement();
-            writer.Flush();
         }
 
         private static void WriteSoap12Fault(
@@ -265,65 +274,74 @@ namespace FastSoap.Core.Serialization
             IReadOnlyList<SoapQName>? notUnderstoodHeaders,
             string? soap12Role)
         {
-            using Utf8XmlWriter writer = new Utf8XmlWriter(destination, XmlEssentialsAdapter.SharedWriterOptions);
-            writer.WriteStartElement(
-                SoapConstants.EnvelopePrefixUtf8,
-                SoapConstants.EnvelopeLocalNameUtf8,
-                SoapConstants.Soap12NamespaceUtf8);
-
-            if (fault.Kind == SoapFaultKind.MustUnderstand &&
-                notUnderstoodHeaders is { Count: > 0 })
+            Utf8XmlWriter writer = new Utf8XmlWriter(destination, XmlEssentialsAdapter.SharedWriterOptions);
+            bool completed = false;
+            try
             {
-                WriteNotUnderstoodHeaders(writer, notUnderstoodHeaders);
-            }
+                writer.WriteStartElement(
+                    SoapConstants.EnvelopePrefixUtf8,
+                    SoapConstants.EnvelopeLocalNameUtf8,
+                    SoapConstants.Soap12NamespaceUtf8);
 
-            writer.WriteStartElement(
-                SoapConstants.EnvelopePrefixUtf8,
-                SoapConstants.BodyLocalNameUtf8,
-                SoapConstants.Soap12NamespaceUtf8);
-            writer.WriteStartElement(
-                SoapConstants.EnvelopePrefixUtf8,
-                SoapConstants.FaultLocalNameUtf8,
-                SoapConstants.Soap12NamespaceUtf8);
+                if (fault.Kind == SoapFaultKind.MustUnderstand &&
+                    notUnderstoodHeaders is { Count: > 0 })
+                {
+                    WriteNotUnderstoodHeaders(writer, notUnderstoodHeaders);
+                }
 
-            writer.WriteStartElement(SoapConstants.EnvelopePrefixUtf8, "Code"u8, SoapConstants.Soap12NamespaceUtf8);
-            writer.WriteStartElement(SoapConstants.EnvelopePrefixUtf8, "Value"u8, SoapConstants.Soap12NamespaceUtf8);
-            WriteQualifiedFaultCodeValue(writer, fault, SoapConstants.Soap12Namespace);
-            writer.WriteEndElement();
-            writer.WriteEndElement();
+                writer.WriteStartElement(
+                    SoapConstants.EnvelopePrefixUtf8,
+                    SoapConstants.BodyLocalNameUtf8,
+                    SoapConstants.Soap12NamespaceUtf8);
+                writer.WriteStartElement(
+                    SoapConstants.EnvelopePrefixUtf8,
+                    SoapConstants.FaultLocalNameUtf8,
+                    SoapConstants.Soap12NamespaceUtf8);
 
-            writer.WriteStartElement(SoapConstants.EnvelopePrefixUtf8, "Reason"u8, SoapConstants.Soap12NamespaceUtf8);
-            writer.WriteStartElement(SoapConstants.EnvelopePrefixUtf8, "Text"u8, SoapConstants.Soap12NamespaceUtf8);
-            writer.WriteAttributeString("xml", "lang", XmlNamespace, "en-US");
-            writer.WriteStringValue(fault.Reason);
-            writer.WriteEndElement();
-            writer.WriteEndElement();
-
-            if (fault.ActorOrNode is not null)
-            {
-                writer.WriteStartElement(SoapConstants.EnvelopePrefixUtf8, "Node"u8, SoapConstants.Soap12NamespaceUtf8);
-                writer.WriteStringValue(fault.ActorOrNode);
+                writer.WriteStartElement(SoapConstants.EnvelopePrefixUtf8, "Code"u8, SoapConstants.Soap12NamespaceUtf8);
+                writer.WriteStartElement(SoapConstants.EnvelopePrefixUtf8, "Value"u8, SoapConstants.Soap12NamespaceUtf8);
+                WriteQualifiedFaultCodeValue(writer, fault, SoapConstants.Soap12Namespace);
                 writer.WriteEndElement();
-            }
-
-            if (soap12Role is not null)
-            {
-                writer.WriteStartElement(SoapConstants.EnvelopePrefixUtf8, "Role"u8, SoapConstants.Soap12NamespaceUtf8);
-                writer.WriteStringValue(soap12Role);
                 writer.WriteEndElement();
-            }
 
-            if (!fault.DetailXmlUtf8.IsEmpty)
-            {
-                writer.WriteStartElement(SoapConstants.EnvelopePrefixUtf8, "Detail"u8, SoapConstants.Soap12NamespaceUtf8);
-                writer.WriteRawValue(fault.DetailXmlUtf8.Span, skipInputValidation: false);
+                writer.WriteStartElement(SoapConstants.EnvelopePrefixUtf8, "Reason"u8, SoapConstants.Soap12NamespaceUtf8);
+                writer.WriteStartElement(SoapConstants.EnvelopePrefixUtf8, "Text"u8, SoapConstants.Soap12NamespaceUtf8);
+                writer.WriteAttributeString("xml", "lang", XmlNamespace, "en-US");
+                writer.WriteStringValue(fault.Reason);
                 writer.WriteEndElement();
-            }
+                writer.WriteEndElement();
 
-            writer.WriteEndElement();
-            writer.WriteEndElement();
-            writer.WriteEndElement();
-            writer.Flush();
+                if (fault.ActorOrNode is not null)
+                {
+                    writer.WriteStartElement(SoapConstants.EnvelopePrefixUtf8, "Node"u8, SoapConstants.Soap12NamespaceUtf8);
+                    writer.WriteStringValue(fault.ActorOrNode);
+                    writer.WriteEndElement();
+                }
+
+                if (soap12Role is not null)
+                {
+                    writer.WriteStartElement(SoapConstants.EnvelopePrefixUtf8, "Role"u8, SoapConstants.Soap12NamespaceUtf8);
+                    writer.WriteStringValue(soap12Role);
+                    writer.WriteEndElement();
+                }
+
+                if (!fault.DetailXmlUtf8.IsEmpty)
+                {
+                    writer.WriteStartElement(SoapConstants.EnvelopePrefixUtf8, "Detail"u8, SoapConstants.Soap12NamespaceUtf8);
+                    writer.WriteRawValue(fault.DetailXmlUtf8.Span, skipInputValidation: false);
+                    writer.WriteEndElement();
+                }
+
+                writer.WriteEndElement();
+                writer.WriteEndElement();
+                writer.WriteEndElement();
+                writer.Flush();
+                completed = true;
+            }
+            finally
+            {
+                XmlEssentialsAdapter.DisposeSafely(writer, completed);
+            }
         }
 
         #endregion

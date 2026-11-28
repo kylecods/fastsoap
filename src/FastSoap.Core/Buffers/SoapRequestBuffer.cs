@@ -98,7 +98,7 @@ namespace FastSoap.Core.Buffers
 
         #region Constructors
 
-        private SoapRequestBuffer(byte[] buffer, int length, bool clearOnReturn, ArrayPool<byte> pool)
+        internal SoapRequestBuffer(byte[] buffer, int length, bool clearOnReturn, ArrayPool<byte> pool)
         {
             _buffer = buffer;
             _length = length;
@@ -211,6 +211,54 @@ namespace FastSoap.Core.Buffers
         }
 
         /// <summary>
+        /// Incrementally copies and optionally decompresses the entire request body from <paramref name="bodyReader"/>
+        /// into a bounded pooled buffer up to <paramref name="maxBytes"/> decompressed bytes.
+        /// </summary>
+        /// <param name="bodyReader">The request <see cref="PipeReader"/> to consume without completing or disposing it.</param>
+        /// <param name="maxBytes">The maximum permitted logical payload size in bytes.</param>
+        /// <param name="encoding">The transport <see cref="SoapCompressionEncoding"/> of the incoming wire bytes.</param>
+        /// <param name="initialCapacity">The initial pool rental size hint in bytes.</param>
+        /// <param name="clearOnReturn">Whether to zero-clear the used region before returning rented arrays to <paramref name="pool"/>.</param>
+        /// <param name="pool">The <see cref="ArrayPool{T}"/> to rent from, or <see langword="null"/> to use <see cref="ArrayPool{T}.Shared"/>.</param>
+        /// <param name="cancellationToken">A cancellation token monitored during pipe reads.</param>
+        /// <returns>An owned <see cref="SoapRequestBuffer"/> containing the complete bounded UTF-8 request bytes.</returns>
+        public static async ValueTask<SoapRequestBuffer> CopyFromPipeAsync(
+            PipeReader bodyReader,
+            int maxBytes,
+            SoapCompressionEncoding encoding,
+            int initialCapacity = 4096,
+            bool clearOnReturn = true,
+            ArrayPool<byte>? pool = null,
+            CancellationToken cancellationToken = default)
+        {
+            if (encoding == SoapCompressionEncoding.Identity)
+            {
+                return await CopyFromPipeAsync(
+                    bodyReader,
+                    maxBytes,
+                    initialCapacity,
+                    clearOnReturn,
+                    pool,
+                    cancellationToken).ConfigureAwait(false);
+            }
+
+            using SoapRequestBuffer compressedBuffer = await CopyFromPipeAsync(
+                bodyReader,
+                maxBytes,
+                initialCapacity,
+                clearOnReturn,
+                pool,
+                cancellationToken).ConfigureAwait(false);
+
+            return SoapCompressionCodec.Decompress(
+                compressedBuffer.Memory,
+                encoding,
+                maxBytes,
+                clearOnReturn,
+                pool);
+        }
+
+        /// <summary>
         /// Zero-clears used bytes when configured and returns the owned buffer to its originating pool exactly once.
         /// </summary>
         public void Dispose()
@@ -256,9 +304,9 @@ namespace FastSoap.Core.Buffers
 
         #endregion
 
-        #region Private Methods
+        #region Internal Methods
 
-        private static byte[] GrowBuffer(
+        internal static byte[] GrowBuffer(
             ArrayPool<byte> pool,
             byte[] current,
             int written,

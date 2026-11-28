@@ -148,6 +148,16 @@ namespace FastSoap.Core.Protocol
         /// </summary>
         public static ReadOnlySpan<byte> Soap12NamespaceUtf8 => "http://www.w3.org/2003/05/soap-envelope"u8;
 
+        /// <summary>
+        /// Gets the UTF-8 bytes for the XML Schema Instance namespace URI (<c>http://www.w3.org/2001/XMLSchema-instance</c>).
+        /// </summary>
+        public static ReadOnlySpan<byte> XsiNamespaceUtf8 => "http://www.w3.org/2001/XMLSchema-instance"u8;
+
+        /// <summary>
+        /// Gets the UTF-8 bytes for the canonical XML Schema Instance prefix (<c>xsi</c>).
+        /// </summary>
+        public static ReadOnlySpan<byte> XsiPrefixUtf8 => "xsi"u8;
+
         #endregion
 
     }

@@ -2,6 +2,7 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.IO.Pipelines;
 using System.Net;
 using System.Threading;
@@ -18,6 +19,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
+using Microsoft.Net.Http.Headers;
 
 namespace FastSoap.AspNetCore.Internal
 {
@@ -26,6 +28,9 @@ namespace FastSoap.AspNetCore.Internal
     {
 
         #region Fields
+
+        private static readonly Func<object?, string, CancellationToken, ValueTask> StartDirectResponseCallback = StartDirectResponseAsync;
+        private static readonly Func<object?, string, CancellationToken, ValueTask> StartDirectResponseWithVaryCallback = StartDirectResponseWithVaryAsync;
 
         private readonly BuiltSoapEndpoint _endpoint;
         private readonly string _endpointPattern;
@@ -205,7 +210,10 @@ namespace FastSoap.AspNetCore.Internal
                 HttpRequest request = httpContext.Request;
                 HttpResponse response = httpContext.Response;
 
-                if (!ValidateContentEncodingHeader(request.Headers.ContentEncoding))
+                if (!TryResolveRequestEncoding(
+                    request.Headers.ContentEncoding,
+                    options.AllowCompressedRequests,
+                    out SoapCompressionEncoding requestEncoding))
                 {
                     statusCode = StatusCodes.Status415UnsupportedMediaType;
                     WriteHeaderOnlyStatus(response, statusCode);
@@ -281,6 +289,7 @@ namespace FastSoap.AspNetCore.Internal
                 using SoapRequestBuffer requestBuffer = await ReadBoundedRequestAsync(
                     request,
                     options,
+                    requestEncoding,
                     ct).ConfigureAwait(false);
 
                 requestByteCount = requestBuffer.Length;
@@ -289,20 +298,52 @@ namespace FastSoap.AspNetCore.Internal
                     new KeyValuePair<string, object?>("endpoint", _endpointPattern),
                     new KeyValuePair<string, object?>("soap.version", versionTag));
 
-                using SoapProcessingResult result = await _endpoint.MessageProcessor.ProcessParsedAsync(
-                    contentTypeInfo,
-                    rawSoapAction,
-                    hasMultipleSoapActions,
-                    httpContext.TraceIdentifier,
-                    requestBuffer.Memory,
-                    httpContext.RequestServices,
-                    httpContext.User,
-                    ct).ConfigureAwait(false);
+                SoapCompressionEncoding responseEncoding = NegotiateResponseEncoding(request.Headers.AcceptEncoding, options);
+                bool useDirectStreaming = options.EnableDirectResponseStreaming &&
+                    responseEncoding == SoapCompressionEncoding.Identity;
+
+                using SoapProcessingResult result = useDirectStreaming
+                    ? await _endpoint.MessageProcessor.ProcessParsedDirectAsync(
+                        contentTypeInfo,
+                        rawSoapAction,
+                        hasMultipleSoapActions,
+                        httpContext.TraceIdentifier,
+                        requestBuffer.Memory,
+                        httpContext.RequestServices,
+                        httpContext.User,
+                        response.BodyWriter,
+                        options.EnableResponseCompression
+                            ? StartDirectResponseWithVaryCallback
+                            : StartDirectResponseCallback,
+                        response,
+                        ct).ConfigureAwait(false)
+                    : await _endpoint.MessageProcessor.ProcessParsedAsync(
+                        contentTypeInfo,
+                        rawSoapAction,
+                        hasMultipleSoapActions,
+                        httpContext.TraceIdentifier,
+                        requestBuffer.Memory,
+                        httpContext.RequestServices,
+                        httpContext.User,
+                        ct).ConfigureAwait(false);
 
                 statusCode = result.StatusCode;
                 faultKindTag = FastSoapTelemetry.FormatFaultKindTag(result.FaultKind);
                 outcomeTag = DetermineOutcomeTag(result);
-                responseByteCount = result.Body.Length;
+                responseByteCount = result.IsDirectStreamed ? result.DirectStreamedBytes : result.Body.Length;
+
+                if (result.UnhandledException is not null)
+                {
+                    FastSoapLogMessages.UnhandledProcessingFault(
+                        _logger,
+                        _endpointPattern,
+                        operationTag,
+                        versionTag,
+                        statusCode,
+                        faultKindTag,
+                        result.FailureStage ?? "unknown",
+                        result.UnhandledException);
+                }
 
                 if (result.FaultKind is not null)
                 {
@@ -313,7 +354,7 @@ namespace FastSoap.AspNetCore.Internal
                         new KeyValuePair<string, object?>("soap.version", versionTag),
                         new KeyValuePair<string, object?>("fault.kind", faultKindTag));
 
-                    if (_logger.IsEnabled(LogLevel.Warning))
+                    if (result.UnhandledException is null && _logger.IsEnabled(LogLevel.Warning))
                     {
                         FastSoapLogMessages.ProtocolRejection(
                             _logger,
@@ -323,6 +364,20 @@ namespace FastSoap.AspNetCore.Internal
                             faultKindTag,
                             "SOAP fault staged for client.");
                     }
+                }
+
+                if (result.IsDirectStreamed)
+                {
+                    if (responseByteCount > 0)
+                    {
+                        FastSoapTelemetry.ResponseBytes.Record(
+                            responseByteCount,
+                            new KeyValuePair<string, object?>("endpoint", _endpointPattern),
+                            new KeyValuePair<string, object?>("operation", operationTag),
+                            new KeyValuePair<string, object?>("soap.version", versionTag));
+                    }
+
+                    return;
                 }
 
                 if (response.HasStarted || ct.IsCancellationRequested)
@@ -344,8 +399,50 @@ namespace FastSoap.AspNetCore.Internal
 
                 if (!result.Body.IsEmpty)
                 {
-                    response.ContentLength = result.Body.Length;
-                    await result.CommitToAsync(response.BodyWriter, ct).ConfigureAwait(false);
+                    if (options.EnableResponseCompression)
+                    {
+                        AppendVaryAcceptEncoding(response);
+                    }
+
+                    bool sentCompressed = false;
+                    if (options.EnableResponseCompression &&
+                        responseEncoding != SoapCompressionEncoding.Identity &&
+                        result.Body.Length >= options.ResponseCompressionMinBytes)
+                    {
+                        int initialCompressedCapacity = Math.Min(Math.Max(512, result.Body.Length), options.MaxResponseBytes);
+                        using BoundedPooledBufferWriter compressedWriter = new BoundedPooledBufferWriter(
+                            initialCompressedCapacity,
+                            options.MaxResponseBytes,
+                            options.ClearPooledBuffers,
+                            _endpoint.BufferPool);
+
+                        bool compressionFitsAndShrinks = false;
+                        try
+                        {
+                            SoapCompressionCodec.Compress(result.Body.Span, responseEncoding, compressedWriter);
+                            compressionFitsAndShrinks = compressedWriter.WrittenCount < result.Body.Length;
+                        }
+                        catch (ResponseQuotaExceededException)
+                        {
+                            compressionFitsAndShrinks = false;
+                        }
+
+                        if (compressionFitsAndShrinks)
+                        {
+                            response.Headers.ContentEncoding = SoapCompressionCodec.ToHeaderValue(responseEncoding);
+                            responseByteCount = compressedWriter.WrittenCount;
+                            response.ContentLength = responseByteCount;
+
+                            await compressedWriter.CommitToAsync(response.BodyWriter, ct).ConfigureAwait(false);
+                            sentCompressed = true;
+                        }
+                    }
+
+                    if (!sentCompressed)
+                    {
+                        response.ContentLength = result.Body.Length;
+                        await result.CommitToAsync(response.BodyWriter, ct).ConfigureAwait(false);
+                    }
 
                     FastSoapTelemetry.ResponseBytes.Record(
                         responseByteCount,
@@ -364,34 +461,44 @@ namespace FastSoap.AspNetCore.Internal
                 statusCode = 499;
                 RecordCancellation(activity);
             }
-            catch (RequestQuotaExceededException)
+            catch (RequestQuotaExceededException) when (!httpContext.Response.HasStarted)
             {
                 statusCode = StatusCodes.Status413PayloadTooLarge;
                 outcomeTag = "quota_rejected";
                 RecordQuotaRejection(activity, options.MaxRequestBytes);
 
-                if (!httpContext.Response.HasStarted && !ct.IsCancellationRequested)
+                if (!ct.IsCancellationRequested)
                 {
                     WriteHeaderOnlyStatus(httpContext.Response, statusCode);
                 }
             }
-            catch (BadHttpRequestException ex) when (ex.StatusCode == StatusCodes.Status413PayloadTooLarge)
-            {
-                statusCode = StatusCodes.Status413PayloadTooLarge;
-                outcomeTag = "quota_rejected";
-                RecordQuotaRejection(activity, options.MaxRequestBytes);
-
-                if (!httpContext.Response.HasStarted && !ct.IsCancellationRequested)
-                {
-                    WriteHeaderOnlyStatus(httpContext.Response, statusCode);
-                }
-            }
-            catch (BadHttpRequestException)
+            catch (InvalidDataException) when (!httpContext.Response.HasStarted)
             {
                 statusCode = StatusCodes.Status400BadRequest;
                 outcomeTag = "http_error";
 
-                if (!httpContext.Response.HasStarted && !ct.IsCancellationRequested)
+                if (!ct.IsCancellationRequested)
+                {
+                    WriteHeaderOnlyStatus(httpContext.Response, statusCode);
+                }
+            }
+            catch (BadHttpRequestException ex) when (!httpContext.Response.HasStarted && ex.StatusCode == StatusCodes.Status413PayloadTooLarge)
+            {
+                statusCode = StatusCodes.Status413PayloadTooLarge;
+                outcomeTag = "quota_rejected";
+                RecordQuotaRejection(activity, options.MaxRequestBytes);
+
+                if (!ct.IsCancellationRequested)
+                {
+                    WriteHeaderOnlyStatus(httpContext.Response, statusCode);
+                }
+            }
+            catch (BadHttpRequestException) when (!httpContext.Response.HasStarted)
+            {
+                statusCode = StatusCodes.Status400BadRequest;
+                outcomeTag = "http_error";
+
+                if (!ct.IsCancellationRequested)
                 {
                     WriteHeaderOnlyStatus(httpContext.Response, statusCode);
                 }
@@ -464,6 +571,37 @@ namespace FastSoap.AspNetCore.Internal
 
         #region Private Methods
 
+        private static void AppendVaryAcceptEncoding(HttpResponse response)
+        {
+            StringValues existing = response.Headers.Vary;
+            if (existing.Count == 0)
+            {
+                response.Headers.Vary = HeaderNames.AcceptEncoding;
+
+                return;
+            }
+
+            for (int index = 0; index < existing.Count; index++)
+            {
+                string? value = existing[index];
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    continue;
+                }
+
+                ReadOnlySpan<char> span = value.AsSpan();
+                foreach (Range tokenRange in span.Split(','))
+                {
+                    if (span[tokenRange].Trim().Equals(HeaderNames.AcceptEncoding, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return;
+                    }
+                }
+            }
+
+            response.Headers.Vary = StringValues.Concat(existing, HeaderNames.AcceptEncoding);
+        }
+
         private static string DetermineOutcomeTag(SoapProcessingResult result)
         {
             if (result.FaultKind is not null)
@@ -479,14 +617,33 @@ namespace FastSoap.AspNetCore.Internal
             return "http_error";
         }
 
+        private static SoapCompressionEncoding NegotiateResponseEncoding(
+            StringValues acceptEncodingHeaders,
+            SoapEndpointOptions options)
+        {
+            if (!options.EnableResponseCompression || acceptEncodingHeaders.Count == 0)
+            {
+                return SoapCompressionEncoding.Identity;
+            }
+
+            if (acceptEncodingHeaders.Count == 1)
+            {
+                return SoapCompressionCodec.NegotiateAcceptEncoding(acceptEncodingHeaders[0].AsSpan());
+            }
+
+            return SoapCompressionCodec.NegotiateAcceptEncoding(acceptEncodingHeaders.ToString().AsSpan());
+        }
+
         private async ValueTask<SoapRequestBuffer> ReadBoundedRequestAsync(
             HttpRequest request,
             SoapEndpointOptions options,
+            SoapCompressionEncoding requestEncoding,
             CancellationToken ct)
         {
             return await SoapRequestBuffer.CopyFromPipeAsync(
                 request.BodyReader,
                 options.MaxRequestBytes,
+                requestEncoding,
                 initialCapacity: 4096,
                 clearOnReturn: options.ClearPooledBuffers,
                 pool: _endpoint.BufferPool,
@@ -569,22 +726,54 @@ namespace FastSoap.AspNetCore.Internal
             return "unknown";
         }
 
-        private static bool ValidateContentEncodingHeader(StringValues contentEncodingHeaders)
+        private static async ValueTask StartDirectResponseAsync(
+            object? state,
+            string responseContentType,
+            CancellationToken ct)
+        {
+            HttpResponse response = (HttpResponse)state!;
+            response.StatusCode = StatusCodes.Status200OK;
+            response.Headers.ContentType = responseContentType;
+
+            await response.StartAsync(ct).ConfigureAwait(false);
+        }
+
+        private static async ValueTask StartDirectResponseWithVaryAsync(
+            object? state,
+            string responseContentType,
+            CancellationToken ct)
+        {
+            HttpResponse response = (HttpResponse)state!;
+            response.StatusCode = StatusCodes.Status200OK;
+            response.Headers.ContentType = responseContentType;
+            AppendVaryAcceptEncoding(response);
+
+            await response.StartAsync(ct).ConfigureAwait(false);
+        }
+
+        private static bool TryResolveRequestEncoding(
+            StringValues contentEncodingHeaders,
+            bool allowCompressedRequests,
+            out SoapCompressionEncoding encoding)
         {
             if (contentEncodingHeaders.Count == 0)
             {
+                encoding = SoapCompressionEncoding.Identity;
+
                 return true;
             }
 
             if (contentEncodingHeaders.Count > 1)
             {
+                encoding = SoapCompressionEncoding.Identity;
+
                 return false;
             }
 
-            string? value = contentEncodingHeaders[0];
-
-            return string.IsNullOrWhiteSpace(value) ||
-                string.Equals(value.Trim(), "identity", StringComparison.OrdinalIgnoreCase);
+            return SoapCompressionCodec.TryParseRequestContentEncoding(
+                contentEncodingHeaders[0],
+                allowCompressedRequests,
+                out encoding);
         }
 
         private static void WriteHeaderOnlyStatus(HttpResponse response, int statusCode)

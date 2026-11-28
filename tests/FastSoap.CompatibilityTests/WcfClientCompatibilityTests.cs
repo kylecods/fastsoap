@@ -201,6 +201,84 @@ namespace FastSoap.CompatibilityTests
             }
         }
 
+        [Fact]
+        public async Task WcfClient_Soap11AndSoap12_DeserializesTypedFaultExceptionDetail()
+        {
+            await using CompatibilityServerHost host = await CompatibilityServerHost.StartAsync();
+
+            BasicHttpBinding soap11Binding = new BasicHttpBinding(BasicHttpSecurityMode.None);
+            using (ChannelFactory<IWcfPaymentClient> soap11Factory = new ChannelFactory<IWcfPaymentClient>(
+                soap11Binding,
+                new EndpointAddress(new Uri(host.BaseUri, "/soap11/payment-typed-fault.svc"))))
+            {
+                IWcfPaymentClient soap11Client = soap11Factory.CreateChannel();
+                try
+                {
+                    FaultException<PaymentFaultDetail> fault11 = await Assert.ThrowsAsync<FaultException<PaymentFaultDetail>>(
+                        () => soap11Client.TransferAsync(new TransferRequest
+                        {
+                            AccountNumber = "123456",
+                            Amount = -5.00m,
+                            Currency = "USD"
+                        }));
+
+                    Assert.Equal("Client", fault11.Code.Name);
+                    Assert.Equal("Payment validation failed.", fault11.Message);
+                    Assert.NotNull(fault11.Detail);
+                    Assert.Equal("INVALID_AMOUNT", fault11.Detail.ErrorCode);
+                    Assert.Equal("Transfer amount must be non-negative.", fault11.Detail.Message);
+                }
+                finally
+                {
+                    CloseChannel(soap11Client);
+                }
+            }
+
+            CustomBinding soap12Binding = new CustomBinding(
+                new TextMessageEncodingBindingElement(MessageVersion.Soap12, Encoding.UTF8),
+                new HttpTransportBindingElement());
+            using (ChannelFactory<IWcfPaymentClient> soap12Factory = new ChannelFactory<IWcfPaymentClient>(
+                soap12Binding,
+                new EndpointAddress(new Uri(host.BaseUri, "/soap12/payment-typed-fault.svc"))))
+            {
+                IWcfPaymentClient soap12Client = soap12Factory.CreateChannel();
+                try
+                {
+                    FaultException<PaymentFaultDetail> fault12 = await Assert.ThrowsAsync<FaultException<PaymentFaultDetail>>(
+                        () => soap12Client.TransferAsync(new TransferRequest
+                        {
+                            AccountNumber = "123456",
+                            Amount = -5.00m,
+                            Currency = "USD"
+                        }));
+
+                    Assert.Equal("Sender", fault12.Code.Name);
+                    Assert.Equal("Payment validation failed.", fault12.Message);
+                    Assert.NotNull(fault12.Detail);
+                    Assert.Equal("INVALID_AMOUNT", fault12.Detail.ErrorCode);
+                    Assert.Equal("Transfer amount must be non-negative.", fault12.Detail.Message);
+
+                    FaultException<PaymentFaultDetail> receiverFault12 = await Assert.ThrowsAsync<FaultException<PaymentFaultDetail>>(
+                        () => soap12Client.TransferAsync(new TransferRequest
+                        {
+                            AccountNumber = "TYPED-RECEIVER",
+                            Amount = 10.00m,
+                            Currency = "USD"
+                        }));
+
+                    Assert.Equal("Receiver", receiverFault12.Code.Name);
+                    Assert.Equal("Upstream switch unavailable.", receiverFault12.Message);
+                    Assert.NotNull(receiverFault12.Detail);
+                    Assert.Equal("SWITCH_OFFLINE", receiverFault12.Detail.ErrorCode);
+                    Assert.Equal("Payment switch returned transient failure.", receiverFault12.Detail.Message);
+                }
+                finally
+                {
+                    CloseChannel(soap12Client);
+                }
+            }
+        }
+
         #endregion
 
         #region Private Methods

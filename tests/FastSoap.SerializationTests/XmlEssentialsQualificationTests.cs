@@ -145,7 +145,7 @@ namespace FastSoap.SerializationTests
         #region Fields
 
         private static readonly C1QualificationXmlContext s_strictContext = new C1QualificationXmlContext(
-            XmlEssentialsAdapter.SharedSerializerOptions);
+            XmlEssentialsAdapter.CreateStrictSerializerOptions());
 
         #endregion
 

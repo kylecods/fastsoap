@@ -135,6 +135,7 @@ namespace FastSoap.CompatibilityTests
     [XmlSerializable<EchoHeaderResponseWire>]
     [XmlSerializable<EchoStringRequestWire>]
     [XmlSerializable<EchoStringResponseWire>]
+    [XmlSerializable<PaymentFaultDetail>]
     [XmlSerializable<TransferRequest>]
     [XmlSerializable<TransferRequestWire>]
     [XmlSerializable<TransferResponseWire>]
@@ -224,15 +225,18 @@ namespace FastSoap.CompatibilityTests
     }
 
     [DataContract(Namespace = "urn:payments")]
+    [XmlRoot(ElementName = "PaymentFaultDetail", Namespace = "urn:payments")]
     public sealed class PaymentFaultDetail
     {
 
         #region Properties
 
         [DataMember(Order = 0)]
+        [XmlElement(ElementName = "ErrorCode", Namespace = "urn:payments", Order = 0)]
         public string ErrorCode { get; set; } = string.Empty;
 
         [DataMember(Order = 1)]
+        [XmlElement(ElementName = "Message", Namespace = "urn:payments", Order = 1)]
         public string Message { get; set; } = string.Empty;
 
         #endregion

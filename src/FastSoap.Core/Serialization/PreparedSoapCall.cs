@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace FastSoap.Core.Serialization
     /// </summary>
     /// <remarks>
     /// Instances hold a strongly typed deserialized request DTO and execute the typed handler before
-    /// staging the full SOAP envelope into a <see cref="BoundedPooledBufferWriter"/>.
+    /// staging or streaming the full SOAP envelope.
     /// </remarks>
     public abstract class PreparedSoapCall
     {
@@ -30,6 +31,8 @@ namespace FastSoap.Core.Serialization
         /// </summary>
         public abstract SoapOperationDescriptor Descriptor { get; }
 
+        internal virtual bool SupportsSplitExecution => false;
+
         #endregion
 
         #region Public Methods
@@ -43,6 +46,20 @@ namespace FastSoap.Core.Serialization
         public abstract ValueTask ExecuteAndWriteAsync(
             BoundedPooledBufferWriter destination,
             CancellationToken cancellationToken);
+
+        #endregion
+
+        #region Internal Methods
+
+        internal virtual ValueTask ExecuteAsync(CancellationToken cancellationToken)
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        internal virtual long WriteDirectResponse(IBufferWriter<byte> destination)
+        {
+            return 0;
+        }
 
         #endregion
 

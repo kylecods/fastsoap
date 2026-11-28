@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -164,6 +165,7 @@ namespace FastSoap.Core.Serialization
             private readonly SoapOperationDescriptor _descriptor;
             private readonly SoapOperationHandler<TRequest, TResponse> _handler;
             private readonly TRequest _request;
+            private TResponse? _response;
             private readonly XmlTypeInfo<TResponse> _responseTypeInfo;
 
             #endregion
@@ -173,6 +175,8 @@ namespace FastSoap.Core.Serialization
             public override SoapCallContext Context => _context;
 
             public override SoapOperationDescriptor Descriptor => _descriptor;
+
+            internal override bool SupportsSplitExecution => true;
 
             #endregion
 
@@ -202,6 +206,34 @@ namespace FastSoap.Core.Serialization
             {
                 ArgumentNullException.ThrowIfNull(destination);
 
+                TResponse response = await InvokeHandlerAsync(cancellationToken).ConfigureAwait(false);
+                SoapResponseWriter.WriteResponse(_context.Version, destination, response, _responseTypeInfo);
+            }
+
+            #endregion
+
+            #region Internal Methods
+
+            internal override async ValueTask ExecuteAsync(CancellationToken cancellationToken)
+            {
+                _response = await InvokeHandlerAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            internal override long WriteDirectResponse(IBufferWriter<byte> destination)
+            {
+                ArgumentNullException.ThrowIfNull(destination);
+
+                TResponse response = _response ?? throw new InvalidOperationException("Operation handler has not been executed.");
+
+                return SoapResponseWriter.WriteResponseAndCount(_context.Version, destination, response, _responseTypeInfo);
+            }
+
+            #endregion
+
+            #region Private Methods
+
+            private async ValueTask<TResponse> InvokeHandlerAsync(CancellationToken cancellationToken)
+            {
                 TResponse response = await _handler(_request, _context, cancellationToken).ConfigureAwait(false);
                 if (response is null)
                 {
@@ -212,7 +244,7 @@ namespace FastSoap.Core.Serialization
                         _context.Version);
                 }
 
-                SoapResponseWriter.WriteResponse(_context.Version, destination, response, _responseTypeInfo);
+                return response;
             }
 
             #endregion

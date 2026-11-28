@@ -12,6 +12,7 @@ using CloudNimble.Text.Xml.Serialization;
 
 using FastSoap.Abstractions;
 using FastSoap.AspNetCore;
+using FastSoap.Core.Serialization;
 using FastSoap.Metadata;
 
 using Microsoft.AspNetCore.Builder;
@@ -251,6 +252,69 @@ namespace FastSoap.CompatibilityTests
             MapPaymentEndpoint("/soap11/payment-xmlser.svc", SoapVersionFlags.Soap11);
             MapPaymentEndpoint("/soap12/payment-dcs-urn.svc", SoapVersionFlags.Soap12);
             MapPaymentEndpoint("/soap12/payment-xmlser.svc", SoapVersionFlags.Soap12);
+
+            void MapTypedFaultPaymentEndpoint(string path, SoapVersionFlags versions)
+            {
+                app.MapSoap(path, soap =>
+                {
+                    soap.ConfigureOptions(options =>
+                    {
+                        options.EnabledVersions = versions;
+                        options.MaxRequestBytes = 65536;
+                    });
+
+                    soap.MapOperation(
+                        descriptor: CompatibilityDescriptors.Transfer,
+                        requestType: xmlContext.TransferRequestWire,
+                        responseType: xmlContext.TransferResponseWire,
+                        handler: (wire, _, ct) =>
+                        {
+                            ct.ThrowIfCancellationRequested();
+                            IncrementInvocation();
+
+                            if (wire.Request.Amount < 0m)
+                            {
+                                throw SoapFaultDetailSerializer.CreateFaultException(
+                                    SoapFaultKind.Sender,
+                                    "Payment validation failed.",
+                                    new PaymentFaultDetail
+                                    {
+                                        ErrorCode = "INVALID_AMOUNT",
+                                        Message = "Transfer amount must be non-negative."
+                                    },
+                                    xmlContext.PaymentFaultDetail,
+                                    httpStatusCode: HttpStatusCode.InternalServerError);
+                            }
+
+                            if (string.Equals(wire.Request.AccountNumber, "TYPED-RECEIVER", StringComparison.Ordinal))
+                            {
+                                throw SoapFaultDetailSerializer.CreateFaultException(
+                                    SoapFaultKind.Receiver,
+                                    "Upstream switch unavailable.",
+                                    new PaymentFaultDetail
+                                    {
+                                        ErrorCode = "SWITCH_OFFLINE",
+                                        Message = "Payment switch returned transient failure."
+                                    },
+                                    xmlContext.PaymentFaultDetail);
+                            }
+
+                            return ValueTask.FromResult(new TransferResponseWire
+                            {
+                                TransferResult = new TransferResult
+                                {
+                                    TransactionId = "TX-001",
+                                    Successful = true,
+                                    ProcessedAtUtc = new DateTime(2026, 11, 26, 12, 0, 0, DateTimeKind.Utc),
+                                    Status = PaymentStatus.Completed
+                                }
+                            });
+                        });
+                });
+            }
+
+            MapTypedFaultPaymentEndpoint("/soap11/payment-typed-fault.svc", SoapVersionFlags.Soap11);
+            MapTypedFaultPaymentEndpoint("/soap12/payment-typed-fault.svc", SoapVersionFlags.Soap12);
 
             app.MapSoap("/soap11/echo-headers.svc", soap =>
             {

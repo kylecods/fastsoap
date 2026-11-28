@@ -83,6 +83,40 @@ namespace FastSoap.Core.Serialization
         }
 
         /// <summary>
+        /// Creates a new <see cref="XmlSerializerOptions"/> configured for strict FastSoap contracts.
+        /// </summary>
+        /// <returns>A fresh <see cref="XmlSerializerOptions"/> instance for binding a single <see cref="XmlSerializerContext"/>.</returns>
+        internal static XmlSerializerOptions CreateStrictSerializerOptions()
+        {
+            return CreateSharedSerializerOptions();
+        }
+
+        /// <summary>
+        /// Disposes <paramref name="writer"/> while preserving any original exception thrown before normal completion.
+        /// </summary>
+        /// <param name="writer">The active <see cref="Utf8XmlWriter"/> instance.</param>
+        /// <param name="completed"><see langword="true"/> if writing completed normally; <see langword="false"/> during exception unwinding.</param>
+        internal static void DisposeSafely(Utf8XmlWriter writer, bool completed)
+        {
+            if (completed)
+            {
+                writer.Dispose();
+
+                return;
+            }
+
+            try
+            {
+                writer.Dispose();
+            }
+            catch
+            {
+                // Preserve the original serialization or quota exception rather than masking it with
+                // Utf8XmlWriter.Dispose()'s unclosed-element check while still releasing internal resources.
+            }
+        }
+
+        /// <summary>
         /// Verifies that <paramref name="utf8Xml"/> contains no processing instructions anywhere in the document,
         /// including inside deserialized body elements where <c>XmlSerializer.Deserialize</c> would otherwise skip them.
         /// </summary>
